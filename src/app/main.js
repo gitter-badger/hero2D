@@ -58,6 +58,18 @@ var Hero2D = Hero2D || {};
  	}
 
  	/**
+ 	 * Default project data
+ 	 * @type {Object}
+ 	 */
+ 	Hero2D.project = {
+
+ 		name: null,
+ 		window_width: 640,
+ 		window_height: 480
+
+ 	}
+
+ 	/**
 	 * NodeJS Modules
 	 */
 	Hero2D.module = {
@@ -157,6 +169,15 @@ var Hero2D = Hero2D || {};
 	 */
 	Hero2D.join('ext/jquery.min.js');
 	Hero2D.join('ext/context.menu.js');
+
+	Hero2D.importView = function(source, target) {
+		return $(target).load('../' + Hero2D.data.location + 'views/' + source);
+	}
+
+	Hero2D.loadEditor = function() {
+		Hero2D.importView('application.html', 'content');
+		console.info(Hero2D.project);
+	};
 
 	/**
 	 * Load Frontend components

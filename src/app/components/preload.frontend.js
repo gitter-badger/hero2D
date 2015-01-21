@@ -24,7 +24,7 @@
 				'marginTop': '-' + (height / 2) - 30
 			});
 		});
-		$('modal > close-icon').click(function() {
+		$('modal > close-icon, [close-modal]').click(function() {
 			$('black-layer').hide();
 			$('modal').hide();
 		});
@@ -43,12 +43,20 @@
 	$('[file-browser]').click(function() {
 		var $target = $('[' + $(this).attr('file-browser') + ']');
 		$target.change(function(evt) {
-			$('preload').hide();
-			$('application').show();
+			Hero2D.loadEditor();
 			Hero2D.data.last_project = $(this).val();
 			Hero2D.writeData(Hero2D.data.settings, Hero2D.data);
 		});
 		$target.trigger('click');
+	});
+
+	$('#new-project [button]').click(function() {
+		var projectName = $('#new-project input').val();
+		if(projectName) {
+			$('#new-project input').attr('value', '');
+			Hero2D.project.name = projectName;
+			Hero2D.loadEditor();
+		}
 	});
 
 	/** Modal management */
@@ -56,7 +64,7 @@
 
 	/** Existing Project ? */
 	if(Hero2D.data.last_project && Hero2D.fileExists(Hero2D.data.last_project)) {
-		$('application').show();
+		Hero2D.loadEditor();
 	} else {
-		$('preload').show();
+		
 	}

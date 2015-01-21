@@ -179,14 +179,13 @@ preload {
 	margin-left: -252px;
 	margin-top: -160px;
 	text-align: center;
-	display: none;
 }
 
 preload > logo {
 	display: block;
 	margin: 0 auto;
-	width: 113px;
-	height: 104px;
+	width: 209px;
+	height: 86px;
 	background: url(../../assets/pictures/logo.png) no-repeat;
 }
 
@@ -311,7 +310,7 @@ close-icon {
 
 close-icon:hover {
 	opacity: 1;
-	cursor: pointer;
+	cursor: default !important;
 }
 
 input, select, textarea {

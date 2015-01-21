@@ -5,10 +5,10 @@
 		"icon": "src/assets/pictures/app.png",
 		"toolbar": true,
 		"frame": true,
-		"width": 820,
+		"width": 880,
 		"height": 550,
 		"position": "mouse",
-		"min_width": 820,
+		"min_width": 880,
 		"min_height": 550
 	}
 }
