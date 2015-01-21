@@ -257,6 +257,7 @@ black-layer {
 }
 
 modal {
+	-webkit-transition: none;
 	position: fixed;
 	left: 50%;
 	top: 50%;

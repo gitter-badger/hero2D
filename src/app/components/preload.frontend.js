@@ -15,23 +15,24 @@
  	 * @return {}
  	 */
 	function modalManagement() {
-		$('modal').each(function() {
-			var width = $(this).width();
-			var height = $(this).height();
-
-			$(this).css({
-				'marginLeft': '-' + (width / 2) - 30,
-				'marginTop': '-' + (height / 2) - 30
-			});
-		});
-		$('modal > close-icon, [close-modal]').click(function() {
+		
+		$(document).on('click', 'modal > close-icon, [close-modal]', function(){
 			$('black-layer').hide();
 			$('modal').hide();
 		});
-		$('[show-modal]').click(function(event) {
+		$(document).on('click', '[show-modal]', function(event){
 			var target = '#' + $(this).attr('show-modal');
 			$('black-layer').show();
 			$(target).show();
+			$('modal').each(function() {
+				var width = $(this).width();
+				var height = $(this).height();
+
+				$(this).css({
+					'marginLeft': '-' + (width / 2) - 30,
+					'marginTop': '-' + (height / 2) - 30
+				});
+			});
 			event.preventDefault();
 		});
 	}
@@ -40,7 +41,7 @@
 	 * Load a project
 	 * @return {}
 	 */
-	$('[file-browser]').click(function() {
+	$(document).on('click', '[file-browser]', function(){
 		var $target = $('[' + $(this).attr('file-browser') + ']');
 		$target.change(function(evt) {
 			Hero2D.loadEditor();
@@ -50,7 +51,7 @@
 		$target.trigger('click');
 	});
 
-	$('#new-project [button]').click(function() {
+	$(document).on('click', '#new-project [button]', function(){
 		var projectName = $('#new-project input').val();
 		if(projectName) {
 			$('#new-project input').attr('value', '');
@@ -66,5 +67,5 @@
 	if(Hero2D.data.last_project && Hero2D.fileExists(Hero2D.data.last_project)) {
 		Hero2D.loadEditor();
 	} else {
-		
+		Hero2D.importView('preload.html', 'content');
 	}

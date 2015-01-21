@@ -176,7 +176,6 @@ var Hero2D = Hero2D || {};
 
 	Hero2D.loadEditor = function() {
 		Hero2D.importView('application.html', 'content');
-		console.info(Hero2D.project);
 	};
 
 	/**
