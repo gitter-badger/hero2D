@@ -65,7 +65,26 @@ var Hero2D = Hero2D || {};
 
  		name: null,
  		window_width: 640,
- 		window_height: 480
+ 		window_height: 480,
+
+ 	}
+
+ 	/**
+ 	 * Default game JSON parameters
+ 	 * @type {Object}
+ 	 */
+ 	Hero2D.JSON = {
+
+ 		name: Hero2D.project.name,
+ 		main: "bin/engine.app",
+ 		window: {
+ 			toolbar: false,
+ 			frame: true,
+ 			width: Hero2D.project.window_width,
+ 			height: Hero2D.project.window_height,
+ 			min_width: Hero2D.project.window_width,
+ 			min_height: Hero2D.project.window_height
+ 		}
 
  	}
 

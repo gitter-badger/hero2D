@@ -19,6 +19,15 @@
  		return Hero2D.writeData(destination, Hero2D.project);
  	};
 
+ 	/**
+ 	 * Generate the JSON Application File
+ 	 * @param  {[string]} destination
+ 	 * @return {[boolean]}
+ 	 */
+ 	Hero2D.generateJSON = function(destination) {
+ 		Hero2D.createJSON(destination, Hero2D.JSON);
+ 	};
+
 	/**
 	 * Create a new project
 	 * @param  {[string]} string
@@ -47,5 +56,8 @@
 
 		/** Create the project file */
 		Hero2D.createProjectFile(dir + 'game.hproj');
+
+		/** Create the JSON Application file */
+		Hero2D.generateJSON(dir + 'package.json');
 
 	};
