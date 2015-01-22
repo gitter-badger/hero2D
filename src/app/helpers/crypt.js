@@ -15,7 +15,7 @@
 	 * @param  {String}
 	 * @return {Crypted Data}
 	 */
-	Hero2D.encrypt = function(string){
+	Hero2D.encrypt = function(string) {
 		var cipher = Hero2D.module.crypto.createCipher(Hero2D.data.algorithm, Hero2D.data.hash);
 		var crypted = cipher.update(string, 'utf8', 'hex');
 		crypted += cipher.final('hex');
@@ -27,7 +27,7 @@
 	 * @param  {Crypted Data}
 	 * @return {String}
 	 */
-	Hero2D.decrypt = function(string){
+	Hero2D.decrypt = function(string) {
 		var decipher = Hero2D.module.crypto.createDecipher(Hero2D.data.algorithm, Hero2D.data.hash);
 		var dec = decipher.update(string, 'hex', 'utf8');
 		dec += decipher.final('utf8');

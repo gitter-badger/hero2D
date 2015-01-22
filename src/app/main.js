@@ -104,7 +104,7 @@ var Hero2D = Hero2D || {};
  	};
 
  	/**
-	 * Load helpers
+	 * Load Crypt Library
 	 */
 	Hero2D.join('helpers/crypt.js');
 
@@ -164,6 +164,13 @@ var Hero2D = Hero2D || {};
  		Hero2D.data = Hero2D.readData(Hero2D.data.settings);
  	}
 
+ 	/**
+ 	 * Load Helpers
+ 	 */
+ 	Hero2D.join('helpers/misc.js');
+	Hero2D.join('helpers/files.js');
+	Hero2D.join('helpers/projects.js');
+
 	/**
 	 * Load External Libraries
 	 */
@@ -182,5 +189,7 @@ var Hero2D = Hero2D || {};
 	 * Load Frontend components
 	 */
 	Hero2D.join('components/preload.frontend.js');
+
+	Hero2D.createProject('Test de jeu !');
 
 })(Hero2D);
