@@ -154,8 +154,10 @@ body {
 	font-size: 0.75em;
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.04);
 	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
 	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: subpixel-antialiased;
+	-webkit-text-stroke: 0.1px white;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
 	cursor: default !important;
 }
 
@@ -163,11 +165,13 @@ a {
 	text-decoration: none;
 	font-weight: bold;
 	color: #007eff;
+	-webkit-text-stroke: 0.1px #007eff;
 	cursor: default !important;
 }
 
 a:hover {
 	color: #3fb3ff;
+	-webkit-text-stroke: 0.1px #3fb3ff;
 }
 
 preload {
@@ -213,6 +217,7 @@ help-icon:hover {
 
 blue-color {
 	color: #007eff;
+	-webkit-text-stroke: 0.1px #007eff;
 }
 
 version {
@@ -232,6 +237,7 @@ version > blue-color {
 	background-color: #313131;
 	padding: 10px 20px;
 	color: white;
+	-webkit-text-stroke: 0.1px white;
 	font-weight: 500;
 	border: 1px solid #202020;
 	cursor: default !important;
@@ -294,6 +300,7 @@ modal input, modal textarea, modal select {
 	width: 100%;
 	padding: 10px 15px;
 	color: rgba(0, 0, 0, 0.78);
+	-webkit-text-stroke: 0.1px white;
 	border: 2px solid #007EFF;
 	background-color: rgba(0, 0, 0, 0.26);
 	color: white;
