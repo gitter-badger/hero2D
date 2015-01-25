@@ -1,6 +1,26 @@
 @import url(helpers/animate.min.css);
 
 @font-face{
+    font-family:"dejavusansmono";
+    src:url("../../assets/fonts/dejavusansmono/dejavusansmono.eot?#iefix");
+    src:url("../../assets/fonts/dejavusansmono/dejavusansmono.eot?#iefix") format("eot"),
+    url("../../assets/fonts/dejavusansmono/dejavusansmono.woff") format("woff"),
+    url("../../assets/fonts/dejavusansmono/dejavusansmono.ttf") format("truetype"),
+    url("../../assets/fonts/dejavusansmono/dejavusansmono.svg#dejavusansmono") format("svg");
+    font-weight: normal;
+}
+
+@font-face{
+    font-family:"menloregular";
+    src:url("../../assets/fonts/menloregular/menloregular.eot?#iefix");
+    src:url("../../assets/fonts/menloregular/menloregular.eot?#iefix") format("eot"),
+    url("../../assets/fonts/menloregular/menloregular.woff") format("woff"),
+    url("../../assets/fonts/menloregular/menloregular.ttf") format("truetype"),
+    url("../../assets/fonts/menloregular/menloregular.svg#menloregular") format("svg");
+    font-weight: normal;
+}
+
+@font-face{
     font-family:"opensans";
     src:url("../../assets/fonts/opensans/OpenSans-Regular.eot?#iefix");
     src:url("../../assets/fonts/opensans/OpenSans-Regular.eot?#iefix") format("eot"),
@@ -142,25 +162,29 @@
 * {
 	margin: 0;
 	padding: 0;
-	-webkit-transition: all .4s;
 	-webkit-user-select: none;
 }
 
 body {
-	background-color: #232323;
-	color: white;
+	background-color: white;
+	color: rgba(35, 35, 35, 0.61);
 	font-family: 'opensans', sans-serif;
 	font-size: 0.75em;
+	font-weight: 500;
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.04);
 	-webkit-font-smoothing: antialiased;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: subpixel-antialiased;
-	-webkit-text-stroke: 0.1px white;
-	text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+	-webkit-text-stroke: 0.3px #232323;
 	cursor: default !important;
 }
 
+application, preload {
+	display: none;
+}
+
 a {
+	-webkit-transition: all .4s;
 	text-decoration: none;
 	font-weight: bold;
 	color: #007eff;
@@ -232,24 +256,20 @@ version > blue-color {
 }
 
 [button] {
-	-webkit-transition: all .4s;
-	background-color: #313131;
+	-webkit-transition: all .4s !important;
+	background-color: rgba(49, 49, 49, 0.1);
 	padding: 10px 20px;
-	color: white;
-	-webkit-text-stroke: 0.1px white;
+	color: rgba(35, 35, 35, 0.68);
+	-webkit-text-stroke: 0.1px #232323;
 	font-weight: 500;
-	border: 1px solid #202020;
+	border: 1px solid rgba(32, 32, 32, 0.1);
 	cursor: default !important;
 }
 
 [button]:hover {
 	color: white;
-	border-color: #29272e;
-	background-color: #007ac9;
-}
-
-application {
-	display: none;
+	border-color: rgba(0, 93, 153, 0.56);
+	background-color: rgba(0, 122, 201, 0.88);
 }
 
 black-layer {
@@ -267,7 +287,7 @@ modal {
 	left: 50%;
 	top: 50%;
 	z-index: 100;
-	background-color: #232323;
+	background-color: white;
 	padding: 30px;
 	box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 	display: none;
@@ -275,12 +295,14 @@ modal {
 
 modal > h1 {
 	font-size: 1.5em;
-	text-transform: uppercase;
+	font-weight: normal;
 	text-align: center;
 	margin: 20px 0;
 	margin-top: 0;
-	padding-bottom: 10px;
-	border-bottom: 3px solid #007eff;
+	background-color: #007EFF;
+	color: white;
+	padding: 15px;
+	font-weight: bold;
 }
 
 modal [button] {
@@ -297,27 +319,28 @@ modal#new-project {
 modal input, modal textarea, modal select {
 	display: block;
 	width: 100%;
-	padding: 10px 15px;
-	color: rgba(0, 0, 0, 0.78);
-	-webkit-text-stroke: 0.1px white;
-	border: 2px solid #007EFF;
-	background-color: rgba(0, 0, 0, 0.26);
-	color: white;
+	-webkit-transition: all .4s !important;
+	background-color: rgba(49, 49, 49, 0.1);
+	padding: 10px 20px;
+	color: rgba(35, 35, 35, 0.68);
+	-webkit-text-stroke: 0.1px #232323;
+	font-weight: 500;
+	border: 1px solid rgba(32, 32, 32, 0.1);
 }
 
 close-icon {
+	-webkit-transition: all .4s;
 	position: absolute;
-	right: 10px;
-	top: 10px;
-	width: 25px;
-	height: 26px;
-	background: url(../../assets/pictures/modal/close-icon.png) no-repeat;
-	opacity: 0.4;
+	right: 0;
+	top: 0;
+	background-color: #007EFF;
+	padding: 9px;
+	color: white;
 }
 
 close-icon:hover {
-	opacity: 1;
 	cursor: default !important;
+	background-color: #E23838;
 }
 
 input, select, textarea {
@@ -327,4 +350,236 @@ input, select, textarea {
 
 input[type=file] {
 	display: none;
+}
+
+/** Application */
+application {
+	width: 100% !important;
+	height: 100% !important;
+	overflow: hidden;
+}
+
+/** Sidebar */
+sidebar {
+	overflow: auto;
+	display: block;
+	float: left;
+	width: 190px;
+	height: 100%;
+	background-color: #e2e6ec;
+	-webkit-text-stroke: 0.1px #232323;
+}
+
+sidebar > logo {
+	display: block;
+	margin: 20px auto;
+	width: 80%;
+	height: 55px;
+	background: url(../../assets/pictures/logo.png) no-repeat;
+	background-size: cover;
+}
+
+application {
+	display: block;
+}
+
+description {
+	display: block;
+	background-color: rgba(128, 128, 128, 0.14);
+	padding: 10px;
+	margin-bottom: 5px;
+}
+
+/** Editor */
+editor {
+	display: block;
+	width: 100%;
+	height: 100%;
+	background-color: gray;
+}
+
+/** Tabs */
+tabs {
+	display: block;
+	height: auto;
+	width: 100%;
+	background-color: #232323;
+}
+
+tab {
+	-webkit-transition: all .4s !important;
+	background-color: rgba(49, 49, 49, 0.1);
+	padding: 17px 20px;
+	padding-top: 10px;
+	color: rgba(35, 35, 35, 0.68);
+	-webkit-text-stroke: 0.1px #232323;
+	font-weight: 500;
+	border: 1px solid rgba(32, 32, 32, 0.1);
+	cursor: default !important;
+	display: inline-block;
+	height: 10px;
+	color: rgba(255, 255, 255, 0.5);
+	margin-left: -3px;
+	opacity: 0.5;
+}
+
+tab[active], tab:hover {
+	opacity: 1;
+	color: white;
+	border-color: #0c6fb0;
+	background-color: #1d88ce;
+}
+
+tab:first-of-type {
+	margin-left: 0;
+}
+
+tab > i {
+	padding: 1px;
+	font-size: 0.8em;
+}
+
+tab > i.icon-close {
+	padding-right: 0;
+	margin-left: 10px;
+}
+
+/** Sidebar categories */
+ul, li, span[folder] {
+	-webkit-transition: all .4s;
+	list-style-type: none;
+	display: block;
+}
+
+[categories] {
+	color: #707d8c;
+}
+
+[sub-category] {
+	display: none;
+}
+
+.deployed > [sub-category] {
+	display: block;
+}
+
+[categories] > [category] {
+	-webkit-transition: all .4s;
+	font-size: 1.1em;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+[category] [category] {
+	padding-left: 2px;
+	margin: 5px 0;
+}
+
+[categories] > [category] > span[folder] {
+	-webkit-transition: all .4s;
+	display: block;
+	padding: 10px 11px;
+	padding-left: 20px;
+}
+
+[sub-category] {
+	padding: 5px 0 5px 25px;
+	font-size: 12px;
+}
+
+[item] {
+	-webkit-transition: all .4s;
+	padding: 2px;
+	margin: 5px 0;
+}
+
+[categories] > .deployed > span[folder], [categories] > [category] > span[folder]:hover {
+	color: white !important;
+	background-color: #057afb !important;
+}
+
+.deployed > span[folder], li[active] {
+	color: #057afb;
+}
+
+li[active] {
+	font-weight: bold;
+}
+
+[item]:hover, span[folder]:hover {
+	color: #057afb;
+	padding-left: 5px;
+}
+
+hero#editor {
+	width: 100%;
+	height: 100%;
+	display: block;
+	background-color: white !important;
+}
+
+hero#editor .CodeMirror {
+	font-family: dejavusansmono;
+	background-color: white !important;
+	font-size: 1.1em;
+	-webkit-text-stroke: 0.1px gray;
+	height: 100%;
+	padding-left: 5px;
+}
+
+/** Header bar */
+header {
+	-webkit-transition: all .4s;
+	background-color: #f4f8fa;
+	display: block;
+	width: 100%;
+	height: 40px;
+	border-bottom: 1px solid rgba(181, 184, 189, 0.48);
+	padding-left: 10px;
+	position: fixed;
+	z-index: 10;
+	opacity: 0;
+	top: -55px;
+}
+
+sidebar:hover header {
+	top: 0;
+	opacity: 1;
+}
+
+header a {
+	color: #707d8c;
+	-webkit-text-stroke: 0.1px #707d8c;
+	font-weight: 500;
+	padding: 5px 10px;
+	display: inline-block;
+	background-color: white;
+	margin: 5px 0;
+	margin-left: -4px;
+	border: 1px solid rgba(112, 125, 140, 0.25);
+}
+
+header a[active] {
+	color: white;
+	background-color: rgba(5, 122, 251, 1);
+}
+
+header a:first-of-type {
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+
+header a:last-of-type {
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+
+/** Scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #057afb;
+	border: 1px solid #E2E6EC;
 }

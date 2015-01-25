@@ -33,13 +33,13 @@
 	 * @param  {[string]} string
 	 * @return {[boolean]}
 	 */
-	Hero2D.createProject = function(name) {
+	Hero2D.createProject = function(name, dir) {
 
 		/**
-		 * Directory project path
+		 * Directory project path (if empty)
 		 * @type {[string]}
 		 */
-		var dir = 'projects/' + Hero2D.slugify(name) + '/';
+		dir = (typeof dir === 'undefined') ? 'projects/' + Hero2D.slugify(name) + '/' : dir;
 
 		/** Create the new project directory */
 		Hero2D.createDir(dir);
@@ -59,5 +59,13 @@
 
 		/** Create the JSON Application file */
 		Hero2D.generateJSON(dir + 'package.json');
+
+		/** Create directories */
+		Hero2D.createDir(dir + 'bin/');
+		Hero2D.createDir(dir + 'structure/');
+
+		/** Copy sample game files */
+		Hero2D.copy('src/app/sample/start.app', dir + 'bin/start.app');
+		Hero2D.copy('src/app/sample/pixi.min.js', dir + 'bin/ext/pixi.min.js');
 
 	};

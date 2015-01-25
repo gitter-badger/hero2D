@@ -22,6 +22,8 @@ var Hero2D = Hero2D || {};
 
 (function() {
 
+	'use strict';
+
  	/**
  	 * Application informations & settings
  	 * @type {Object}
@@ -76,14 +78,13 @@ var Hero2D = Hero2D || {};
  	Hero2D.JSON = {
 
  		name: Hero2D.project.name,
- 		main: "bin/engine.app",
+ 		main: "bin/start.app",
  		window: {
  			toolbar: false,
  			frame: true,
  			width: Hero2D.project.window_width,
  			height: Hero2D.project.window_height,
- 			min_width: Hero2D.project.window_width,
- 			min_height: Hero2D.project.window_height
+ 			resizable: false
  		}
 
  	}
@@ -195,20 +196,25 @@ var Hero2D = Hero2D || {};
 	 */
 	Hero2D.join('ext/jquery.min.js');
 	Hero2D.join('ext/context.menu.js');
+	Hero2D.join('ext/codemirror/lib/codemirror.js');
+	Hero2D.join('ext/codemirror/mode/javascript/javascript.js');
+	Hero2D.join('ext/codemirror/keymap/sublime.js');
 
 	Hero2D.importView = function(source, target) {
 		return $(target).load('../' + Hero2D.data.location + 'views/' + source);
 	}
 
 	Hero2D.loadEditor = function() {
-		Hero2D.importView('application.html', 'content');
+		$('preload').hide();
+		$('application').show();
 	};
 
 	/**
 	 * Load Frontend components
 	 */
 	Hero2D.join('components/preload.frontend.js');
+	Hero2D.join('components/editor.frontend.js');
 
-	Hero2D.createProject('Test de jeu !');
+	//Hero2D.createProject('Test de jeu !');
 
 })(Hero2D);

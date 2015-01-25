@@ -11,14 +11,22 @@
  */
 
  	/**
- 	 * Show/Hide Modal
+ 	 * Hide Modal
+ 	 * @return N/A
+ 	 */
+ 	function hideModal() {
+ 		$('black-layer').hide();
+		$('modal').hide();
+ 	}
+
+ 	/**
+ 	 * Modals Management
  	 * @return {}
  	 */
 	function modalManagement() {
 		
 		$(document).on('click', 'modal > close-icon, [close-modal]', function(){
-			$('black-layer').hide();
-			$('modal').hide();
+			hideModal();
 		});
 		$(document).on('click', '[show-modal]', function(event){
 			var target = '#' + $(this).attr('show-modal');
@@ -54,6 +62,7 @@
 	$(document).on('click', '#new-project [button]', function(){
 		var projectName = $('#new-project input').val();
 		if(projectName) {
+			hideModal();
 			$('#new-project input').attr('value', '');
 			Hero2D.project.name = projectName;
 			Hero2D.loadEditor();
@@ -67,5 +76,5 @@
 	if(Hero2D.data.last_project && Hero2D.fileExists(Hero2D.data.last_project)) {
 		Hero2D.loadEditor();
 	} else {
-		Hero2D.importView('preload.html', 'content');
+		$('preload').show();
 	}
