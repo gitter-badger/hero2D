@@ -85,3 +85,8 @@
     
     /** Join the game to the party ! */
     join(mainFile);
+
+    /** Oups, play function is not called ! */
+    if(!play.called) {
+        play(function() {});
+    }

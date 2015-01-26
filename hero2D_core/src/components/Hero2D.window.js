@@ -29,7 +29,7 @@
     var H2D_game_stage;
     var H2D_game_container; // Default container (sprites, etc)
 
-    // Come on buddy, stop with your blur, this is so uggly.
+    // Come on buddy Pixi, stop with your blur, this is so uggly.
     PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
 
     function windowSettings(options) {
@@ -65,6 +65,10 @@
         winHeight: H2D_window_height
     });
 
+    /**
+     * Create the canvas stage
+     * @return {[object]}
+     */
     function createLevel() {
         H2D_game_stage = new PIXI.Stage;
         H2D_game_container = (H2D_window_scale) ? new PIXI.DisplayObjectContainer() : H2D_game_stage;
@@ -73,45 +77,4 @@
             H2D_game_stage.addChild(H2D_game_container);
         }
         return H2D_game_stage;
-    }
-
-    function loadSprite(path, x, y) {
-        var texture = PIXI.Texture.fromImage(path);
-        var object = new PIXI.Sprite(texture);
-
-        if(typeof x === "undefined" && typeof y === "undefined") {
-            x = 0;
-            y = 0;
-        }
-
-        object.position.x = x;
-        object.position.y = y;
-
-        return object;
-    }
-
-    function position(source, type, value) {
-        if(type == 'x') {
-            return source.position.x = value;
-        } else {
-            return source.position.y = value;
-        }
-    }
-
-    function displaySprite(sprite) {
-        return H2D_game_container.addChild(sprite);
-    }
-
-    function render() {
-        return H2D_window_renderer.render(H2D_game_stage);
-    }
-
-    function play(callback) {
-        requestAnimationFrame(looper);
-        
-        function looper() {
-            callback();
-            render();
-            return requestAnimationFrame(looper);
-        }
     }

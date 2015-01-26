@@ -16,4 +16,6 @@
     /**
      * Load Hero2D components
      */
+    join('hero2D_core/src/components/Hero2D.keyboard.js');
     join('hero2D_core/src/components/Hero2D.window.js');
+    join('hero2D_core/src/components/Hero2D.sprites.js');
