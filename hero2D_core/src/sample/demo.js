@@ -14,6 +14,7 @@
  */ 
 
     windowSettings({
+        title: "My game",
         width: 320,
         height: 240,
         scale: true
@@ -22,6 +23,4 @@
     var bunny = loadSprite("src/sprites/bunny.png", 20, 20);
     displaySprite(bunny);
 
-    play(function() {
-        bunny.rotation += 0.1;
-    });
+    play(function() {});

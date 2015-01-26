@@ -46,6 +46,7 @@
             H2D_window_renderer.resize(options.width, options.height);
             win.resizeTo(options.width, options.height);
         }
+        if('title' in options) { document.title = options.title; }
 
         /** Create the level */
         createLevel();
