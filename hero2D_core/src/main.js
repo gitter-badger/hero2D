@@ -23,6 +23,7 @@
     var fs = require('fs');
     var path = require('path');
     var gui = require('nw.gui');
+    var sizeOf = require('image-size');
 
     // Get the current window
     var win = gui.Window.get(); 

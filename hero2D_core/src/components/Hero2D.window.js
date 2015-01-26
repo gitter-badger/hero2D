@@ -44,7 +44,7 @@
                 document.body.appendChild(H2D_window_renderer.view);
             }
             H2D_window_renderer.resize(options.width, options.height);
-            win.resizeTo(options.width, options.height);
+            win.resizeTo(options.width, options.height + 29);
         }
         if('title' in options) { document.title = options.title; }
 

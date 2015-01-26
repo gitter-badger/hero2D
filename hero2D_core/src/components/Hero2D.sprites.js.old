@@ -1,0 +1,251 @@
+/*!
+ *
+ * File: Hero2D.sprites.js
+ * Hero2D Framework
+ * Version : 0.0.1
+ * Author : Christophe Corbalan @RedStarZOn
+ * http://www.christophecorbalan.com/
+ *
+ * Copyright 2015 Hero2D
+ * Released under the MIT license
+ *
+ * Date: 2015-01-25
+ * 
+ */
+
+    /** Textures sizes */
+    var H2D_textures_sizes = {};
+
+    /**
+     * Load a sprite
+     * @param  {[string or object]} path/texture
+     * @return {[object]}
+     */
+    /**
+    function sprite(path) {
+        if(typeof path == "object") {
+            var texture = path;
+        } else { 
+            var texture = PIXI.Texture.fromImage(path);
+        }
+        var object = new PIXI.Sprite(texture);
+
+        object.position.x = 0;
+        object.position.y = 0;
+
+        return object;
+    }
+    **/
+
+    /**
+     * Load a new texture
+     * @param  {[string]} source
+     * @return {[object]}
+     */
+    function Texture(source) {
+        return PIXI.Texture.fromImage(source);
+    }
+
+    /**
+     * Get actual picture size (width & height)
+     * @param  {[sintrg]} source
+     * @return {[object]}
+     */
+    function getPictureSize(source) {
+        if(!fileExists('src/game.js')) {
+            return sizeOf('hero2D_core/' + source);
+        } else {
+            return sizeOf(source);
+        }
+    }
+
+    /**
+     * Create a new texture frame
+     * @param  {[object]} options
+     * @return {[object]}
+     */
+    function frame(options) {
+        if("frame" in options) { // Need a specific frame
+            var size = getPictureSize(options.texture.baseTexture.imageUrl);
+            var texture_width = size.width;
+            var texture_height = size.height;
+            var frames = (texture_height / options.height) * (texture_width / options.width);
+            var framesPerLine = texture_width / options.width;
+            var stopTo = options.frame;
+            var item = -1;
+            var line = 0;
+            for(var i = 0; i < frames; i++) {
+                if(item <= framesPerLine) { item++; }
+                if(item >= framesPerLine) { item = 0; line++; }
+                if(i == stopTo) {
+                    // I want this frame !
+                    var position = new PIXI.Rectangle(item * options.width, line * options.height, options.width, options.height);
+                }
+            }
+            var frame = new PIXI.Texture(options.texture.baseTexture, position);
+        } else {
+            var position = new PIXI.Rectangle(options.x, options.y, options.width, options.height);
+            var frame = new PIXI.Texture(options.texture.baseTexture, position);
+        }
+        return frame;
+    }
+
+    function Sprite(path) {
+        if(typeof path == "object") {
+            var spriteTexture = path;
+        } else { 
+            var spriteTexture = new Texture(path);
+        }
+
+        this.path = path;
+        this.spriteTexture = spriteTexture;
+        this.anims = {};
+        this.usedAnim = null;
+        this.size = getPictureSize(spriteTexture.baseTexture.imageUrl);
+        this.object = new PIXI.MovieClip([new frame({
+            texture: spriteTexture,
+            x: 0,
+            y: 0,
+            height: this.size.height,
+            width: this.size.width
+        })]);
+        this.object.animationSpeed = 0.1;
+        this.object.currentFrame = 0;
+        this.object.play();
+
+        /**
+        var object = new PIXI.Sprite(texture);
+
+        object.position.x = 0;
+        object.position.y = 0;
+
+        return object;
+        **/
+
+        /*
+        var frames = [];
+        options.frames.forEach(function(el) {
+            var thisFrame = new frame({
+                texture: options.texture,
+                frame: el,
+                width: options.width,
+                height: options.height
+            });
+            frames.push(thisFrame);
+        });
+        
+        var animation = new PIXI.MovieClip(frames);
+        animation.animationSpeed = 0.1;
+        animation.currentFrame = 0;
+        animation.play();
+
+        return animation;
+        */
+    }
+
+    Sprite.prototype.addAnim = function(options) {
+        this.anims[options.name] = new frame({
+            texture: this.spriteTexture,
+            frames: options.frames,
+            width: options.width,
+            height: options.height
+        });
+    };
+
+    Sprite.prototype.addFrame = function(options) {
+        this.anims[options.name] = new PIXI.MovieClip([new frame({
+            texture: this.spriteTexture,
+            frame: options.frame,
+            width: options.width,
+            height: options.height
+        })]);
+        this.anims[options.name].animationSpeed = 0.1;
+        this.anims[options.name].currentFrame = 0;
+        this.anims[options.name].stop();
+    }
+
+    Sprite.prototype.play = function(anim) {
+        this.object.stop();
+        this.object.visible = false;
+        this.object = this.anims[anim];
+        this.object.visible = true;
+    };
+
+    Sprite.prototype.display = function(x, y) {
+        if(this.usedAnim) {
+            return displaySprite(this.usedAnim, x, y);
+        } else {
+            return displaySprite(this.object, x, y);
+        }
+    }
+
+    Sprite.prototype.x = function(value) {
+        if(typeof value === "undefined") {
+            return this.object.position.x;
+        } else {
+            return this.object.position.x = value;
+        }
+    }
+
+    Sprite.prototype.y = function(value) {
+        if(typeof value === "undefined") {
+            return this.object.position.y;
+        } else {
+            return this.object.position.y = value;
+        }
+    }
+
+    /**
+     * Get or set sprite position
+     * @param  {[string]} source
+     * @param  {[string]} type
+     * @param  {[integer]} value
+     * @return {[integer]}
+     */
+    function position(source, type, value) {
+        if(type == 'x') {
+            if(value === 'undefined') value = source.position.x;
+            return source.position.x = value;
+        } else {
+            if(value === 'undefined') value = source.position.y;
+            return source.position.y = value;
+        }
+    }
+
+    /**
+     * Display sprite
+     * @param  {[object]} options
+     * @return {[object]}
+     */
+    function displaySprite(sprite, x, y) {
+        if(typeof x !== "undefined") {
+            sprite.position.x = x;
+            sprite.position.y = y;
+        }
+        
+        return H2D_game_container.addChild(sprite);
+    }
+
+    /**
+     * Canvas render
+     * @return {[N/A]}
+     */
+    function render() {
+        return H2D_window_renderer.render(H2D_game_stage);
+    }
+
+    /**
+     * Play loop function
+     * @param  {[Function]} callback
+     * @return {[loop]}
+     */
+    function play(callback) {
+        play.called = true;
+        requestAnimationFrame(looper);
+        
+        function looper() {
+            callback();
+            render();
+            return requestAnimationFrame(looper);
+        }
+    }

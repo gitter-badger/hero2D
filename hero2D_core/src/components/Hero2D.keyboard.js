@@ -31,12 +31,19 @@
 
     };
 
+    /** Key pressed ? */
+    var H2D_activeKeyboard = false;
+
+    /** Last pressed key */
+    var H2D_pressedKey = null;
+
     /**
      * Init keyboard
      * @return {[object]}
      */
     function resetKey(e) {
         H2D_keyboard[H2D_keyboard[e.keyCode]] = false;
+        H2D_activeKeyboard = false;
         return H2D_keyboard;
     }
 
@@ -47,9 +54,11 @@
      */
     function keyDown(e) {
         e = e || window.event;
+        H2D_activeKeyboard = true;
         var keyName = H2D_keyboard[e.keyCode];
         if(!(keyName in H2D_keyboard)) H2D_keyboard[keyName] = true;
         H2D_keyboard[keyName] = true;
+        H2D_pressedKey = keyName;
         return e;
     }
 
@@ -64,5 +73,17 @@
      * @return {[boolean]}
      */
     function press(key) {
-        return H2D_keyboard[key];
+        if(typeof key !== "undefined") {
+            return H2D_keyboard[key];
+        } else {
+            return H2D_activeKeyboard;
+        }
+    }
+
+    /**
+     * Last pressed key
+     * @return {[string]} [description]
+     */
+    function pressedKey() {
+        return H2D_pressedKey;
     }

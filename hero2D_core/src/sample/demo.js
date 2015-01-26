@@ -20,86 +20,103 @@
         scale: true
     });
 
-    /** Call the tileset */
-    var texture = new texture("src/sprites/tileset.png");
-
-    /** Tileset & Tiles properties */
-    var tileset_width = tileset_height = 512;
-    var tile_width = tile_height = 16;
-    var tiles = [];
-
-    function getTiles() {
-        for (var i = 0; i < tileset_height / tile_height; i++) {
-            for (var j = 0; j < tileset_width / tile_width; j++) {
-                var tile = new frame({
-                    texture: texture,
-                    x: j * tile_width,
-                    y: i * tile_height,
-                    width: tile_width,
-                    height: tile_height
-                });
-                tiles.push(tile);
-            }
-        }
-        return tiles;
-    }
-
-    function generateMap(options) {
-        getTiles();
-        var out = [];
-        for (var y = 0; y < options.height; y++) {
-            out.push([]);
-     
-            for (var x = 0; x < options.width; x++) {
-                out[y].push([]);
-     
-                // out[y][x].push(options.tileNumber);
-                out[y][x].push(Math.floor((Math.random() * 2) + 0));
-            }
-        }
-        return out;
-    }
-
-    var tile1 = new frame({
-        texture: texture,
-        x: 0,
-        y: 0,
-        width: tile_width,
-        height: tile_height
-    });
-
-    var map = generateMap({
-        width: 50,
-        height: 50
-    });
-
-    // Affichage tiles
-    for (var y = 0; y < map.length; y++) {
-        for (var x = 0; x < map[y].length; x++) {
-            var tile = new sprite(tiles[map[y][x]]);
-            displaySprite(tile, x * tile_width, y * tile_height);
-        }
-    }
 
     /** Create the player sprite */
-    var player = new sprite("src/sprites/bunny.png");
-    displaySprite(player);
+    var player = new Sprite("src/sprites/characters.png");
+
+    player.addAnim({
+        name: 'walk_up',
+        frames: [36, 38, 64],
+        width: 32,
+        height: 32
+    });
+
+    player.addAnim({
+        name: 'walk_down',
+        frames: [47, 56, 65],
+        width: 32,
+        height: 32
+    });
+
+    player.addAnim({
+        name: 'walk_left',
+        frames: [45, 54, 63],
+        width: 32,
+        height: 32
+    });
+
+    player.addAnim({
+        name: 'walk_right',
+        frames: [37, 46, 55],
+        width: 32,
+        height: 32
+    });
+
+    player.addFrame({
+        name: 'static_up',
+        frame: 36,
+        width: 32,
+        height: 32
+    });
+
+    player.addFrame({
+        name: 'static_down',
+        frame: 47,
+        width: 32,
+        height: 32
+    });
+
+    player.addFrame({
+        name: 'static_left',
+        frame: 54,
+        width: 32,
+        height: 32
+    });
+
+    player.addFrame({
+        name: 'static_right',
+        frame: 37,
+        width: 32,
+        height: 32
+    });
+
+    player.play('static_down');
+    
+    player.display((320 / 2) - (32 / 2), (240 / 2) - (32 / 2) + 30);
+
+    //displaySprite(player, x, y);
+
+    var direction = 'down';
 
     play(function() {
+
         if(press('up')) {
-            player.position.y -= 2;
+            direction = 'up';
+            player.play('walk_up');
+            player.y(player.y() - 1.5);
         }
         if(press('down')) {
-            player.position.y += 2;
+            direction = 'down';
+            player.play('walk_down');
+            player.y(player.y() + 1.5);
         }
         if(press('left')) {
-            player.position.x -= 2;
+            direction = 'left';
+            player.play('walk_left');
+            player.x(player.x() - 1.5);
         }
         if(press('right')) {
-            player.position.x += 2;
+            direction = 'right';
+            player.play('walk_right');
+            player.x(player.x() + 1.5);
         }
 
-        if(press('right') && press('left')) {
-            console.info('yolo');
-        }
+        /** Diagonal movements */
+        if(press('right') && press('up')) player.play('walk_up');
+        if(press('left') && press('up')) player.play('walk_up');
+        if(press('right') && press('down')) player.play('walk_down');
+        if(press('left') && press('down')) player.play('walk_down');
+
+        if(!press()) player.play('static_' + direction);
+
     });
