@@ -1,14 +1,13 @@
 {
-	"name": "Hero2D",
-	"main": "src/main.app",
-	"window": {
-		"icon": "src/assets/pictures/app.png",
-		"toolbar": true,
-		"frame": true,
-		"width": 880,
-		"height": 550,
-		"position": "mouse",
-		"min_width": 880,
-		"min_height": 550
-	}
+    "name": null,
+    "main": "hero2D_core/start.app",
+    "window": {
+    	"title": "",
+    	"icon": "hero2D_core/app.png",
+        "toolbar": false,
+        "frame": true,
+        "width": 640,
+        "height": 480,
+        "resizable": false
+    }
 }
