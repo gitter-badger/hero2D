@@ -13,10 +13,18 @@
  * 
  */ 
 
-    /** Window management */
-    join('src/sample/demo.window.js');
+    /** Window parameters */
+    new Window({
+        title: "Welcome to Hero2D !",
+        width: 640,
+        height: 480,
+        scale: true
+    });
 
-    var preload = new Preloader(['src/sprites/tileset.png', 'src/sprites/characters.png']);
+    var preload = new Preloader({
+        mapTileset: 'src/sprites/tileset.png',
+        playerSprite: 'src/sprites/characters.png'
+    });
 
     preload.progress(function(percent) {
         console.log(percent);
@@ -24,6 +32,8 @@
 
     preload.done(function() {
         console.log('fini !');
+
+        var music = new Sound();
 
         /** Map management */
         join('src/sample/demo.map.js');

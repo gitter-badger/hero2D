@@ -27,9 +27,22 @@
  		/** Keep files data */
  		this.files = files;
  		this.queries = {};
+ 		this.type = {}; // Type of file (Sprite or Sound)
 
- 		/** Preload every files */
- 		for(var i = 0; i < this.files.length; i++) this.queries[this.files[i]] = "progress";
+ 		for(var key in files) {
+
+ 			/** Check if it's a sprite or a sound */
+ 			var ext = this.files[key].split('.').pop();
+ 			if(ext == "ogg" || ext == "mp3" || ext == "wav") {
+ 				this.type[key] = "sound";
+ 			} else {
+ 				this.type[key] = "sprite";
+ 			}
+
+ 			/** Every new files in progress */
+ 			this.queries[key] = "progress";
+
+ 		}
 
  	};
 
@@ -43,7 +56,7 @@
  	Preloader.prototype.progress = function(callback) {
 
  		/** Request every files */
- 		for(var i = 0; i < this.files.length; i++) this.requestFile(this.files[i], callback);
+ 		for(var key in this.files) this.requestFile(this.files[key], callback);
 
  		/** Return the callback function */
  		return callback;
@@ -69,7 +82,7 @@
  	Preloader.prototype.getPercent = function() {
 
  		/** Number of files */
- 		var files = this.files.length;
+ 		var files = Object.keys(this.files).length;
  		var doneFiles = [];
 
  		/** Okay, we need to get the number of preloaded files */
@@ -79,7 +92,7 @@
 
  		/** Forget division by 0 ! (donesFiles / files) * 100 */
  		if(doneFiles.length > 0)
- 			var percent = (doneFiles.length / this.files.length) * 100;
+ 			var percent = (doneFiles.length / files) * 100;
  		else
  			var percent = 0;
 
@@ -136,4 +149,13 @@
 		function error(event) {
 			displayError('main.js', 'Problem with preloading. Please check the files to preload.');
 		}
+
  	};
+
+ 	/**
+ 	 * Select a preloaded file
+ 	 * @return {[string]}
+ 	 */
+ 	Preloader.prototype.$ = function(name) {
+ 		return this.files[name];
+ 	}

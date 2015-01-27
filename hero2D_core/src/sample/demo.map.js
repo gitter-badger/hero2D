@@ -1,7 +1,7 @@
 
 
     /** Call the tileset */
-    var mapTexture = new Texture("src/sprites/tileset.png");
+    var mapTexture = new Texture(preload.$('mapTileset'));
 
     /** Tileset & Tiles properties */
     var tileset_width = tileset_height = 512;

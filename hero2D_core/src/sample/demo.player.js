@@ -1,6 +1,6 @@
     
     /** Create the player sprite */
-    var playerTexture = new Texture("src/sprites/characters.png");
+    var playerTexture = new Texture(preload.$('playerSprite'));
     var playerFrame = new Frame({
         texture: playerTexture,
         frame: 38,

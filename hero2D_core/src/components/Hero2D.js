@@ -21,3 +21,4 @@
     join('src/components/Hero2D.keyboard.js');
     join('src/components/Hero2D.window.js');
     join('src/components/Hero2D.sprites.js');
+    join('src/components/Hero2D.sound.js');
