@@ -28,6 +28,7 @@
  		this.files = files;
  		this.queries = {};
  		this.type = {}; // Type of file (Sprite or Sound)
+ 		this.buffers = {};
 
  		for(var key in files) {
 
@@ -56,7 +57,7 @@
  	Preloader.prototype.progress = function(callback) {
 
  		/** Request every files */
- 		for(var key in this.files) this.requestFile(this.files[key], callback);
+ 		for(var key in this.files) this.requestFile(key, this.files[key], callback);
 
  		/** Return the callback function */
  		return callback;
@@ -106,10 +107,11 @@
  	 * @param  {[string]} file
  	 * @return {[N/A]}
  	 */
- 	Preloader.prototype.requestFile = function(file, callback) {
+ 	Preloader.prototype.requestFile = function(filename, file, callback) {
 
  		/** Create the XMLHttpRequest element */
  		var self = this;
+ 		var filename = filename;
  		var requestedFile = file;
  		var currentQuery = self.queries[requestedFile];
  		currentQuery = new XMLHttpRequest();
@@ -121,6 +123,11 @@
 
 		/** Ask for the requested file */
 		currentQuery.open("GET", requestedFile, true);
+
+		/** It's a sound ! */
+		if(this.type[filename] == "sound") currentQuery.responseType = 'arraybuffer';
+
+		/** Send the query */
 		currentQuery.send();
 
 		/**
@@ -137,8 +144,20 @@
 		 * @return {Function} [description]
 		 */
 		function done() {
-			self.queries[requestedFile] = "done"; // Okay, done for this file !
-			if(self.getPercent() >= 100) self.doneCallback();
+			/** It's a sound file ! */
+			if(self.type[filename] == "sound") {
+				// Decode audio buffer now !
+				H2D_audioContext.decodeAudioData(currentQuery.response, function(buffer) {
+					self.buffers[filename] = buffer; // Keep the buffer
+					self.queries[requestedFile] = "done"; // Okay, done for this file !
+					if(self.getPercent() >= 100) self.doneCallback(); // Already done ?
+				}, function(err) {
+					throw new Error(err);
+				});
+			} else { // Normal file
+				self.queries[requestedFile] = "done"; // Okay, done for this file !
+				if(self.getPercent() >= 100) self.doneCallback();
+			}
 		}
 
 		/**
@@ -155,7 +174,13 @@
  	/**
  	 * Select a preloaded file
  	 * @return {[string]}
+ 	 * Ex:
+ 	 * 		new Sprite(preload.$('mapTileset'));
  	 */
  	Preloader.prototype.$ = function(name) {
- 		return this.files[name];
+ 		if(this.type[name] == "sound") {
+			return this.buffers[name];
+		} else {
+			return this.files[name];
+		}
  	}

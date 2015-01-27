@@ -23,7 +23,10 @@
 
     var preload = new Preloader({
         mapTileset: 'src/sprites/tileset.png',
-        playerSprite: 'src/sprites/characters.png'
+        playerSprite: 'src/sprites/characters.png',
+        music: 'src/sounds/iron.ogg',
+        baseUnderAttack: 'src/sounds/baseUnderAttack.ogg',
+        iron: 'src/sounds/iron.mp3'
     });
 
     preload.progress(function(percent) {
@@ -33,7 +36,14 @@
     preload.done(function() {
         console.log('fini !');
 
-        var music = new Sound();
+        var playAudioFile = function (buffer) {
+        var source = H2D_audioContext.createBufferSource();
+        source.buffer = buffer;
+        source.connect(H2D_audioContext.destination);
+        source.start(0); // Play sound immediately
+    };
+
+        playAudioFile(preload.$('iron'));
 
         /** Map management */
         join('src/sample/demo.map.js');

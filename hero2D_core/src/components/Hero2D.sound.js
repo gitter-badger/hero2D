@@ -13,6 +13,9 @@
  * 
  */ 
 
+ 	/** Audio Context */
+	var H2D_audioContext = new AudioContext();
+
     function Sound(item) {
     	return 'hi !';
     }
