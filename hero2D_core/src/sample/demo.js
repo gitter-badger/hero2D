@@ -15,8 +15,8 @@
 
     var preload = new Preloader(['src/sprites/tileset.png', 'src/sprites/characters.png']);
 
-    preload.progress(function() {
-
+    preload.progress(function(percent) {
+        alert(percent);
     });
 
     preload.done(function() {
