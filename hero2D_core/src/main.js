@@ -87,5 +87,8 @@
     /** Join the game to the party ! */
     join(mainFile);
 
+    /** Come on, you can't create a game without a window ! */
+    if(!Window.called) { displayError('main.js', 'You need to create the Window with "Window()" method.<br />Example :<br />new Window({title:"My game", width:640, height:480});'); }
+
     /** Oups, play function is not called ! */
     if(!play.called) play(function() {});

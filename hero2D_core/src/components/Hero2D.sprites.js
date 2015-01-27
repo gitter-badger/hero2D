@@ -25,104 +25,213 @@
             this.spriteTexture = new Texture(source);
         }
 
-        /**
-         * Parameters
-         */
-        this.anims = {};
-        this.animType = {};
-        this.usedAnim = null;
+        /** Parameters */
+        this.anims = {}; // Registered animations
+        this.animType = {}; // Animation or frame ?
+        this.usedAnim = null; // Last used anim
+        this.object; // Main sprite
+
+        /** Sprite creation */
         this.object = new PIXI.Sprite(this.spriteTexture);
         this.object.position.x = 0;
         this.object.position.y = 0;
 
     }
 
-    Sprite.prototype.addFrame = function(options) {
+    /**
+     * Add a frame to the sprite
+     * @param {[object]} options
+     * Ex:
+     * player.frame({
+     *     name: "static_down",
+     *     frame: 35,
+     *     width: 32,
+     *     height: 32
+     * });
+     */
+    Sprite.prototype.frame = function(options) {
+
+        /** Frame creation */
         this.anims[options.name] = new Frame({
-            texture: this.spriteTexture,
-            frame: options.frame,
-            width: options.width,
-            height: options.height
+            texture: this.spriteTexture, // We keep the base sprite texture
+            frame: options.frame, // Select the frame !
+            width: options.width, // Width of the frame
+            height: options.height // Height of the frame
         });
+
+        /** Type of frame */
         this.animType[options.name] = "frame";
+
     };
 
-    Sprite.prototype.addAnim = function(options) {
+    /**
+     * Animated Sprite creation
+     * @param  {[object]} options
+     * Ex:
+     * player.anim({
+     *     name: "walk_down",
+     *     frames: [35, 36, 37],
+     *     width: 32,
+     *     height: 32
+     * });
+     */
+    Sprite.prototype.anim = function(options) {
+
+        /** Frames container */
         var keys = [];
+
+        /** Global var for sprite texture (thanks foreach) */
         var spriteTexture = this.spriteTexture;
 
+        /** So, it's time to create all the frames ! */
         options.frames.forEach(function(el) {
             keys.push(new Frame({
-                texture: spriteTexture,
-                frame: el,
-                width: options.width,
-                height: options.height
+                texture: spriteTexture, // Same sprite texture
+                frame: el, // Actual key
+                width: options.width, // Frame width
+                height: options.height // Frame height
             }));
         });
+
+        /** Okay, now we need to create our animation ! */
         this.anims[options.name] = new PIXI.MovieClip(keys);
-        this.anims[options.name].animationSpeed = 0.1;
+        this.anims[options.name].animationSpeed = ("speed" in options) ? options.speed: 0.1;
         this.anims[options.name].currentFrame = 0;
         this.anims[options.name].position.x = 0;
         this.anims[options.name].position.y = 0;
-        this.anims[options.name].play();
+
+        /** Hide this animation */
+        this.anims[options.name].stop();
         this.anims[options.name].visible = false;
 
+        /** This is an animation ! */
         this.animType[options.name] = "anim";
+
     };
 
+    /**
+     * Launch sprite animation !
+     * @param  {[string]} anim [description]
+     */
     Sprite.prototype.animate = function(anim) {
-        if(this.usedAnim) this.anims[this.usedAnim].visible = false;
+
+        /** Change the actual used animation */
         this.usedAnim = anim;
+
+        /** Hey buddy, please keep the same position than the original sprite */
         this.anims[anim].position.x = this.object.position.x;
         this.anims[anim].position.y = this.object.position.y;
+
+        /** Okay, ready to play ! */
+        this.anims[anim].play();
         this.anims[anim].visible = true;
+
+        /** Display the animation to canvas */
+        displaySprite(this.anims[anim], this.anims[anim].position.x, this.anims[anim].position.y);
+
     };
 
+    /**
+     * Play a frame or an animation
+     * @param  {[string]} anim
+     * Ex:
+     *     player.play('walk_down');
+     */
     Sprite.prototype.play = function(anim) {
-        // It's a simple sprite
+
+        /** Someone is asking a simple frame ! */
         if(this.animType[anim] == "frame") {
+
+            /** Okay wait, we found an used animation, stop this one */
             if(this.usedAnim) {
                 this.anims[this.usedAnim].visible = false;
-                this.usedAnim = null;
+                this.anims[this.usedAnim].stop();
+                removeSprite(this.anims[this.usedAnim]);
+                this.usedAnim = null; // Reset the last used animation !
             }
+
+            /** Display the new frame ! */
             this.object.visible = true;
-            this.object.setTexture(this.anims[anim]);
-        } else { // It's an animation
+            this.object.setTexture(this.anims[anim]); // Change sprite texture
+
+        } 
+        else { /** Damn wait, it's an animation ! */
+
+            /** Okay we need to stop the last animation */
+            if(this.usedAnim) {
+                this.anims[this.usedAnim].visible = false;
+                this.anims[this.usedAnim].stop();
+                removeSprite(this.anims[this.usedAnim]); // Remove sprite from the canvas
+            }
+
+            /** Hide the default sprite and launch the animation ! */
             this.object.visible = false;
             this.animate(anim);
+
         }
+
     }
 
+    /**
+     * Get the X position of the sprite
+     * @param  {[integer]} value
+     * @return {[integer or N/A]}
+     * Ex:
+     *     player.x();
+     *     OR
+     *     player.x(15);
+     */
     Sprite.prototype.x = function(value) {
+
         if(typeof value === "undefined") {
-            return this.object.position.x;
+            return this.object.position.x; // Return the sprite position
         } else {
+            // Value is not empty, so we need to change the X position !
             if(this.usedAnim) this.anims[this.usedAnim].position.x = value;
             this.object.position.x = value;
         }
+
     };
 
+    /**
+     * Get the Y position of the sprite
+     * @param  {[integer]} value
+     * @return {[integer or N/A]}
+     * Ex: Same than player.x() method
+     */
     Sprite.prototype.y = function(value) {
+
         if(typeof value === "undefined") {
-            return this.object.position.y;
+            return this.object.position.y; // Return the sprite position
         } else {
+            // Value is not empty, change the Y position
             if(this.usedAnim) this.anims[this.usedAnim].position.y = value;
             this.object.position.y = value;
         }
+
     };
 
+    /**
+     * Display the sprite on canvas
+     * @param  {[integer]} x
+     * @param  {[integer]} y
+     * @return {[object]}
+     */
     Sprite.prototype.display = function(x, y) {
 
-        // Update position
+        // Update global sprite position
         this.object.position.x = x;
         this.object.position.y = y;
 
-        // Display all animations
-        for(var key in this.anims) {
-            if(this.animType[key] == "anim") displaySprite(this.anims[key], x, y);
+        // An animation is used, update her position then !
+        if(this.usedAnim) {
+            this.anims[this.usedAnim].position.x = x;
+            this.anims[this.usedAnim].position.y = y;
         }
 
-        displaySprite(this.object, x, y);
+        /** Add the sprite to the canvas */
+        return displaySprite(this.object, x, y);
+
     };
 
     /**
@@ -140,13 +249,25 @@
      * @return {[object]}
      */
     function Frame(options) {
-        if("frame" in options) { // Need a specific frame
+
+        /** We need a specific frame ! */
+        if("frame" in options) {
+
+            /** Picture size (width & height) */
             var size = getPictureSize(options.texture.baseTexture.imageUrl);
             var texture_width = size.width;
             var texture_height = size.height;
+
+            /** Total number of frames */
             var frames = (texture_height / options.height) * (texture_width / options.width);
+
+            /** Frames by line in the tileset */
             var framesPerLine = texture_width / options.width;
+
+            /** Frame required */
             var stopTo = options.frame;
+
+            /** Frames while */
             var item = -1;
             var line = 0;
             for(var i = 0; i < frames; i++) {
@@ -157,12 +278,19 @@
                     var position = new PIXI.Rectangle(item * options.width, line * options.height, options.width, options.height);
                 }
             }
+
+            /** Create the required frame ! */
             var frame = new PIXI.Texture(options.texture.baseTexture, position);
+
         } else {
+
+            /** Okay give me this frame */
             var position = new PIXI.Rectangle(options.x, options.y, options.width, options.height);
             var frame = new PIXI.Texture(options.texture.baseTexture, position);
+
         }
         return frame;
+
     }
 
     /**
@@ -171,16 +299,15 @@
      * @return {[object]}
      */
     function getPictureSize(source) {
+
+        /** If we are on the demo file */
         if(!fileExists('src/game.js')) {
             return sizeOf('hero2D_core/' + source);
         } else {
-            return sizeOf(source);
+            /** Normal game path */
+            return sizeOf('src/' + source);
         }
     }
-
-
-
-
 
     /**
      * Display sprite
@@ -197,25 +324,10 @@
     }
 
     /**
-     * Canvas render
-     * @return {[N/A]}
+     * Remove sprite from stage
+     * @param  {[string]} sprite
+     * @return {[object]}
      */
-    function render() {
-        return H2D_window_renderer.render(H2D_game_stage);
-    }
-
-    /**
-     * Play loop function
-     * @param  {[Function]} callback
-     * @return {[loop]}
-     */
-    function play(callback) {
-        play.called = true;
-        requestAnimationFrame(looper);
-        
-        function looper() {
-            callback();
-            render();
-            return requestAnimationFrame(looper);
-        }
+    function removeSprite(sprite) {
+        return H2D_game_container.removeChild(sprite);
     }
