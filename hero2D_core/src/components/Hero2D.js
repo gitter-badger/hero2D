@@ -17,6 +17,7 @@
      * Load Hero2D components
      */
     join('src/components/Hero2D.misc.js');
+    join('src/components/Hero2D.preloader.js');
     join('src/components/Hero2D.keyboard.js');
     join('src/components/Hero2D.window.js');
     join('src/components/Hero2D.sprites.js');

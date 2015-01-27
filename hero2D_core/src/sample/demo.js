@@ -13,6 +13,16 @@
  * 
  */ 
 
+    var preload = new Preloader(['src/sprites/tileset.png', 'src/sprites/characters.png']);
+
+    preload.progress(function() {
+
+    });
+
+    preload.done(function() {
+
+    });
+
     /** Window management */
     join('src/sample/demo.window.js');
 
