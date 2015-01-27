@@ -33,22 +33,6 @@
 
  	};
 
- 	Preloader.prototype.state = function() {
-
- 		var isDone = true;
- 		var self = this;
-
- 		for(var key in this.queries) {
- 			if(this.queries[key] != "done") {
- 				isDone = false;
- 				break;
- 			}
- 		}
-
- 		return (isDone) ? console.log('fini') : console.log('pas fini');
-
- 	};
-
  	/**
  	 * Preload in progress
  	 * @param  {Function} callback
@@ -72,25 +56,37 @@
  	 * @return {Function}
  	 */
  	Preloader.prototype.done = function(callback) {
+
+ 		/** Keep the done callback in memory */
  		this.doneCallback = callback;
 
+ 		/** Damn, no play() functiond found ! */
  		if(!play.called) play(function() {});
+
  	};
 
+ 	/**
+ 	 * [getPercent description]
+ 	 * @return {[type]} [description]
+ 	 */
  	Preloader.prototype.getPercent = function() {
 
+ 		/** Number of files */
  		var files = this.files.length;
  		var doneFiles = [];
 
+ 		/** Okay, we need to get the number of preloaded files */
  		for(var key in this.queries) {
  			if(this.queries[key] == "done") doneFiles.push(key);
  		}
 
+ 		/** Forget division by 0 ! (donesFiles / files) * 100 */
  		if(doneFiles.length > 0)
  			var percent = (doneFiles.length / this.files.length) * 100;
  		else
  			var percent = 0;
 
+ 		/** Return global preload percentage */
  		return percent;
  		
  	};
@@ -131,9 +127,7 @@
 		 * @return {Function} [description]
 		 */
 		function done() {
-			//console.log('Done for : ' + requestedFile);
 			self.queries[requestedFile] = "done"; // Okay, done for this file !
-			//console.log(self.queries);
 			if(self.getPercent() >= 100) return self.doneCallback();
 		}
 
@@ -143,6 +137,6 @@
 		 * @return {[type]}
 		 */
 		function error(event) {
-			alert('erreur');
+			displayError('main.js', 'Problem with preloading. Please check the files to preload.');
 		}
  	};
