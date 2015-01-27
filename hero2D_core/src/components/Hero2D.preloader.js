@@ -21,6 +21,9 @@
  	 */
  	function Preloader(files) {
 
+ 		/** Preloader called ! */
+ 		Preloader.called = true;
+
  		/** Keep files data */
  		this.files = files;
  		this.queries = {};
@@ -69,7 +72,9 @@
  	 * @return {Function}
  	 */
  	Preloader.prototype.done = function(callback) {
- 		return callback();
+ 		this.doneCallback = callback;
+
+ 		if(!play.called) play(function() {});
  	};
 
  	Preloader.prototype.getPercent = function() {
@@ -129,7 +134,7 @@
 			//console.log('Done for : ' + requestedFile);
 			self.queries[requestedFile] = "done"; // Okay, done for this file !
 			//console.log(self.queries);
-			return self.state();
+			if(self.getPercent() >= 100) return self.doneCallback();
 		}
 
 		/**
