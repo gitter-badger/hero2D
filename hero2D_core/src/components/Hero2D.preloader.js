@@ -60,9 +60,6 @@
  		/** Keep the done callback in memory */
  		this.doneCallback = callback;
 
- 		/** Damn, no play() functiond found ! */
- 		if(!play.called) play(function() {});
-
  	};
 
  	/**
@@ -128,7 +125,7 @@
 		 */
 		function done() {
 			self.queries[requestedFile] = "done"; // Okay, done for this file !
-			if(self.getPercent() >= 100) return self.doneCallback();
+			if(self.getPercent() >= 100) self.doneCallback();
 		}
 
 		/**
