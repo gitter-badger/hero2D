@@ -28,7 +28,7 @@
  		this.files = files;
  		this.queries = {};
  		this.type = {}; // Type of file (Sprite or Sound)
- 		this.buffers = {};
+ 		this.buffers = {}; // Sounds buffer
 
  		for(var key in files) {
 
@@ -136,6 +136,9 @@
 		 * @return {[N/A]}
 		 */
 		function progress(event) {
+			if(self.type[filename] == "sound") {
+				self.buffers[filename] = new Audio(requestedFile);
+			}
 			return callback(self.getPercent());
 		}
 
@@ -144,7 +147,18 @@
 		 * @return {Function} [description]
 		 */
 		function done() {
-			/** It's a sound file ! */
+			if(self.type[filename] == "sound") {
+				self.buffers[filename].oncanplay = function() {
+					self.queries[requestedFile] = "done"; // Okay, done for this file !
+					if(self.getPercent() >= 100) self.doneCallback();
+				}
+			} else {
+				self.queries[requestedFile] = "done"; // Okay, done for this file !
+				if(self.getPercent() >= 100) self.doneCallback();
+			}
+			/**
+			 * Old method (works but too long)
+			 * /
 			if(self.type[filename] == "sound") {
 				// Decode audio buffer now !
 				H2D_audioContext.decodeAudioData(currentQuery.response, function(buffer) {
@@ -155,9 +169,7 @@
 					throw new Error(err);
 				});
 			} else { // Normal file
-				self.queries[requestedFile] = "done"; // Okay, done for this file !
-				if(self.getPercent() >= 100) self.doneCallback();
-			}
+			**/
 		}
 
 		/**

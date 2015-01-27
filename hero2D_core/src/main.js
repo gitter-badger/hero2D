@@ -75,7 +75,7 @@
     }
 
     /** Remove this useless "locales" folder */
-    if(H2D_fileExists('../locales')) {
+    if(H2D_fileExists('locales')) {
         fs.rmdirSync('locales');
     }
 
