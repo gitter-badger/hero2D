@@ -37,6 +37,9 @@
     /** Last pressed key */
     var H2D_pressedKey = null;
 
+    /** All pressed keys */
+    var H2D_pressedKeys = [];
+
     /**
      * Init keyboard
      * @return {[object]}
@@ -44,6 +47,7 @@
     function resetKey(e) {
         H2D_keyboard[H2D_keyboard[e.keyCode]] = false;
         H2D_activeKeyboard = false;
+        removeArrayItem(H2D_pressedKeys, H2D_keyboard[e.keyCode]);
         return H2D_keyboard;
     }
 
@@ -59,6 +63,7 @@
         if(!(keyName in H2D_keyboard)) H2D_keyboard[keyName] = true;
         H2D_keyboard[keyName] = true;
         H2D_pressedKey = keyName;
+        H2D_pressedKeys.push(keyName);
         return e;
     }
 
@@ -76,7 +81,7 @@
         if(typeof key !== "undefined") {
             return H2D_keyboard[key];
         } else {
-            return H2D_activeKeyboard;
+            return (H2D_pressedKeys.length) ? true : false;
         }
     }
 

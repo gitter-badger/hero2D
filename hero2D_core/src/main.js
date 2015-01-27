@@ -35,6 +35,12 @@
      */
     var join = function(source) {
 
+        if(!H2D_fileExists('src/game.js')) {
+            source = 'hero2D_core/' + source;
+        } else {
+            source = 'src/' + source;
+        }
+
         function read(source) {
             return fs.readFileSync(source).toString();
         }
@@ -52,7 +58,7 @@
      * @param  {[string]} source
      * @return {[boolean]}
      */
-    var fileExists = function(source) {
+    var H2D_fileExists = function(source) {
         return fs.existsSync(source);
     }
 
@@ -69,20 +75,20 @@
     }
 
     /** Remove this useless "locales" folder */
-    if(fileExists('locales')) {
+    if(H2D_fileExists('../locales')) {
         fs.rmdirSync('locales');
     }
 
     /**
      * Load External Libraries
      */
-    join('hero2D_core/src/ext/pixi.min.js');
+    join('src/ext/pixi.min.js');
 
     /** Load Hero2D */
-    join('hero2D_core/src/components/hero2D.js');
+    join('src/components/hero2D.js');
 
     /** Default game or not ? */
-    var mainFile = (fileExists('src/game.js')) ? 'src/game.js' : 'hero2D_core/src/sample/demo.js';
+    var mainFile = (H2D_fileExists('src/game.js')) ? 'game.js' : 'src/sample/demo.js';
     
     /** Join the game to the party ! */
     join(mainFile);

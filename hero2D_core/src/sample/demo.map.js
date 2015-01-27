@@ -1,7 +1,7 @@
 
 
     /** Call the tileset */
-    var mapTexture = texture("src/sprites/tileset.png");
+    var mapTexture = new Texture("src/sprites/tileset.png");
 
     /** Tileset & Tiles properties */
     var tileset_width = tileset_height = 512;
@@ -11,7 +11,7 @@
     function getTiles() {
         for (var i = 0; i < tileset_height / tile_height; i++) {
             for (var j = 0; j < tileset_width / tile_width; j++) {
-                var tile = new frame({
+                var tile = new Frame({
                     texture: mapTexture,
                     x: j * tile_width,
                     y: i * tile_height,
@@ -46,9 +46,11 @@
     });
 
     // Affichage tiles
+    var tile = {};
     for (var y = 0; y < map.length; y++) {
         for (var x = 0; x < map[y].length; x++) {
-            var tile = new sprite(tiles[map[y][x]]);
-            displaySprite(tile, x * tile_width, y * tile_height);
+            tile[x + y] = new Sprite(tiles[map[y][x]]);
+            tile[x + y].display(x * tile_width, y * tile_height);
+            //displaySprite(tile, x * tile_width, y * tile_height);
         }
     }

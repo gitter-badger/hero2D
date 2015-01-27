@@ -15,13 +15,13 @@
 
     /** Sprite constructor */
     function Sprite(source) {
-
+        
         /**
          * Is a texture object or an url ?
          */
         if(typeof source == "object") {
             this.spriteTexture = source;
-        } else { 
+        } else {
             this.spriteTexture = new Texture(source);
         }
 
@@ -289,6 +289,7 @@
             var frame = new PIXI.Texture(options.texture.baseTexture, position);
 
         }
+
         return frame;
 
     }
@@ -301,7 +302,7 @@
     function getPictureSize(source) {
 
         /** If we are on the demo file */
-        if(!fileExists('src/game.js')) {
+        if(!H2D_fileExists('src/game.js')) {
             return sizeOf('hero2D_core/' + source);
         } else {
             /** Normal game path */
