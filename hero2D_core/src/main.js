@@ -30,17 +30,29 @@
     var win = gui.Window.get(); 
 
     /**
+     * File Exists ?
+     * @param  {[string]} source
+     * @return {[boolean]}
+     */
+    var H2D_fileExists = function(source) {
+        return fs.existsSync(H2D_currentPath + source);
+    }
+
+    // Current path
+    var H2D_currentPath = path.dirname(process.execPath) + '/';
+    if(H2D_fileExists('src/game.js')) {
+        H2D_currentPath = path.dirname(process.execPath) + '/src/';
+    } else {
+        H2D_currentPath = path.dirname(process.execPath) + '/hero2D_core/src/';
+    }
+
+    /**
      * Include Javascript File
      * @param  {[string]} source
      * @return {[string]}
      */
     var join = function(source) {
-
-        if(!H2D_fileExists('src/game.js')) {
-            source = 'hero2D_core/' + source;
-        } else {
-            source = 'src/' + source;
-        }
+        source = H2D_currentPath + source;
 
         function read(source) {
             return fs.readFileSync(source).toString();
@@ -51,17 +63,21 @@
         } catch(err) { // Damn, something is going wrong !
             displayError(source, err);
         }
-
     };
 
-    /**
-     * File Exists ?
-     * @param  {[string]} source
-     * @return {[boolean]}
-     */
-    var H2D_fileExists = function(source) {
-        return fs.existsSync(source);
-    }
+    var systemJoin = function(source) {
+        source = path.dirname(process.execPath) + '/hero2D_core/src/' + source;
+
+        function read(source) {
+            return fs.readFileSync(source).toString();
+        }
+
+        try {
+            eval.apply(global, [read(source)]);
+        } catch(err) { // Damn, something is going wrong !
+            displayError(source, err);
+        }
+    };
 
     /**
      * Display a new error
@@ -76,23 +92,24 @@
     }
 
     /** Remove this useless "locales" folder */
-    if(H2D_fileExists('locales')) {
-        fs.rmdirSync('locales');
+    if(H2D_fileExists('../locales')) {
+        fs.rmdirSync(H2D_currentPath + '../locales');
     }
 
     /**
      * Load External Libraries
      */
-    join('src/ext/pixi.min.js');
+    systemJoin('ext/pixi.min.js');
 
     /** Load Hero2D */
-    join('src/components/hero2D.js');
-
-    /** Default game or not ? */
-    var mainFile = (H2D_fileExists('src/game.js')) ? 'game.js' : 'src/sample/demo.js';
+    systemJoin('components/hero2D.js');
     
     /** Join the game to the party ! */
-    join(mainFile);
+    if(H2D_fileExists('../src/game.js')) {
+        join('../src/game.js');
+    } else {
+        systemJoin('sample/demo.js');
+    }
 
     /** Come on, you can't create a game without a window ! */
     if(!Window.called) { displayError('main.js', 'You need to create the Window with "Window()" method.<br />Example :<br />new Window({title:"My game", width:640, height:480});'); }

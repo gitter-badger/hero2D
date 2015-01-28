@@ -311,14 +311,7 @@
      * @return {[object]}
      */
     function getPictureSize(source) {
-
-        /** If we are on the demo file */
-        if(!H2D_fileExists('src/game.js')) {
-            return sizeOf('hero2D_core/' + source);
-        } else {
-            /** Normal game path */
-            return sizeOf('src/' + source);
-        }
+        return sizeOf(source);
     }
 
     /**

@@ -7,6 +7,7 @@
         width: 32,
         height: 32
     });
+    console.log('test');
     var player = new Sprite(playerFrame);
 
     /**
@@ -74,5 +75,4 @@
     /**
      * Default animation
      */
-    //player.play('static_down');
     player.display((320 / 2) - (32 / 2), (240 / 2) - (32 / 2) + 30);
