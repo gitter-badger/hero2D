@@ -24,6 +24,7 @@
     var path = require('path');
     var gui = require('nw.gui');
     var sizeOf = require('image-size');
+    var cryptJS = require('crypto');
 
     // Get the current window
     var win = gui.Window.get(); 

@@ -36,9 +36,8 @@
 
         var music = new Sound(preload.$('music'));
 
-        music.play()
+        music.play();
         music.loop();
-
 
         /** Map management */
         join('src/sample/demo.map.js');
