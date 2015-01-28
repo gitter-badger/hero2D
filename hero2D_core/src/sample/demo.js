@@ -36,7 +36,7 @@
 
         var music = new Sound(preload.$('music'));
 
-        music.play();
+        //music.play();
         music.loop();
 
         /** Map management */
@@ -47,12 +47,17 @@
 
         var direction = 'down';
 
+        var helloWorld = new Text('Hello world !', {font: '12px Arial', fill: 'white', stroke: 'gray', strokeThickness: 2});
+
+        helloWorld.display(60, 60);
+
         play(function() {
 
             if(press('up')) {
                 direction = 'up';
                 player.play('walk_up');
                 player.y(player.y() - 1.5);
+                helloWorld.text('J\'ai changé !');
             }
             if(press('down')) {
                 direction = 'down';
@@ -63,6 +68,7 @@
                 direction = 'left';
                 player.play('walk_left');
                 player.x(player.x() - 1.5);
+                helloWorld.remove();
             }
             if(press('right')) {
                 direction = 'right';
