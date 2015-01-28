@@ -29,6 +29,7 @@
         this.anims = {}; // Registered animations
         this.animType = {}; // Animation or frame ?
         this.usedAnim = null; // Last used anim
+        this.isRemoved = false; // Object removed from canvas ?
         this.object; // Main sprite
 
         /** Sprite creation */
@@ -166,7 +167,7 @@
 
             /** Hide the default sprite and launch the animation ! */
             this.object.visible = false;
-            this.animate(anim);
+            if(!this.isRemoved) this.animate(anim);
 
         }
 
@@ -219,20 +220,34 @@
      */
     Sprite.prototype.display = function(x, y) {
 
-        // Update global sprite position
-        this.object.position.x = x;
-        this.object.position.y = y;
+        // It's not removed !
+        this.isRemoved = false;
 
-        // An animation is used, update her position then !
-        if(this.usedAnim) {
-            this.anims[this.usedAnim].position.x = x;
-            this.anims[this.usedAnim].position.y = y;
+        // Update global sprite position
+        if(typeof x !== 'undefined' && typeof y !== 'undefined') {
+            this.object.position.x = x;
+            this.object.position.y = y;
+
+            // An animation is used, update her position then !
+            if(this.usedAnim) {
+                this.anims[this.usedAnim].position.x = x;
+                this.anims[this.usedAnim].position.y = y;
+            }
         }
 
         /** Add the sprite to the canvas */
-        return displaySprite(this.object, x, y);
+        return displaySprite(this.object, this.object.position.x, this.object.position.y);
 
     };
+
+    /**
+     * Remove sprite from canvas
+     */
+    Sprite.prototype.remove = function() {
+        this.isRemoved = true;
+        H2D_game_container.removeChild(this.anims[this.usedAnim]);
+        H2D_game_container.removeChild(this.object);
+    }
 
     /**
      * Load a new texture

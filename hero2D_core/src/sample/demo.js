@@ -57,11 +57,13 @@
                 direction = 'up';
                 player.play('walk_up');
                 player.y(player.y() - 1.5);
+                player.display();
             }
             if(press('down')) {
                 direction = 'down';
                 player.play('walk_down');
                 player.y(player.y() + 1.5);
+                player.remove();
             }
             if(press('left')) {
                 direction = 'left';
