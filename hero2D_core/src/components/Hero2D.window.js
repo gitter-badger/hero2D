@@ -23,6 +23,7 @@
      */
     var H2D_game_stage;
     var H2D_game_container; // Default container (sprites, etc)
+    var H2D_window_scale;
 
     /** Come on buddy Pixi, stop with your blur, this is so uggly. */
     PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;

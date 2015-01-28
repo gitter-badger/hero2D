@@ -31,3 +31,20 @@
 	    }
 	    return removeCounter;
 	}
+
+	/** FPS settings vars */
+	var H2D_fps = 0, H2D_lastUpdate = (new Date) * 1 - 1, H2D_now, H2D_fpsFilter = 50;
+
+	/**
+	 * Get actual FPS
+	 * @return {[integer]}
+	 */
+	function getFps() {
+		var thisFrameFPS = 1000 / ((H2D_now = new Date) - H2D_lastUpdate);
+		if(H2D_now != H2D_lastUpdate){
+			H2D_fps += (thisFrameFPS - H2D_fps) / H2D_fpsFilter;
+			H2D_lastUpdate = H2D_now;
+		}
+
+		return Math.round(H2D_fps);
+	};

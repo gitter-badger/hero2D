@@ -24,19 +24,18 @@
     var preload = new Preloader({
         mapTileset: 'src/sprites/tileset.png',
         playerSprite: 'src/sprites/characters.png',
+        logo: 'logo.png',
         music: 'src/sounds/theme.mp3'
     });
 
-    preload.progress(function(percent) {
-        console.log(percent);
-    });
+    preload.progress(function() {});
 
     preload.done(function() {
-        console.log('fini !');
 
+        /** Create sound object */
         var music = new Sound(preload.$('music'));
 
-        //music.play();
+        music.play();
         music.loop();
 
         /** Map management */
@@ -45,25 +44,34 @@
         /** Player management */
         join('src/sample/demo.player.js');
 
+        var logo = new Sprite(preload.$('logo'));
+        logo.display(65, 0);
+
         var direction = 'down';
 
-        var helloWorld = new Text('Hello world !', {font: '12px Arial', fill: 'white', stroke: 'gray', strokeThickness: 2});
+        var example = new Text('Hey !');
+        example.display(30, 150);
 
-        helloWorld.display(60, 60);
+        var welcome = new Text('Welcome to Hero2D ! For make a new game, create the src/main.js file. Enjoy !', {font: '11px Trebuchet MS', fill: 'white', stroke: 'gray', strokeThickness: 2, wordWrap: true, wordWrapWidth: 185, align: 'center'});
+
+        var fps = new Text('', {font: '11px Trebuchet MS', fill: 'white', stroke: 'gray', strokeThickness: 2});
+
+        fps.display(10, 10);
+        welcome.display(70, 70);
 
         play(function() {
+
+            fps.text('FPS : ' + getFps());
 
             if(press('up')) {
                 direction = 'up';
                 player.play('walk_up');
                 player.y(player.y() - 1.5);
-                player.display();
             }
             if(press('down')) {
                 direction = 'down';
                 player.play('walk_down');
                 player.y(player.y() + 1.5);
-                player.remove();
             }
             if(press('left')) {
                 direction = 'left';

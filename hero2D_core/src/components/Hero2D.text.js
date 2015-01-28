@@ -40,7 +40,7 @@
             this.object.position.x = x;
             this.object.position.y = y;
         }
-        return H2D_game_stage.addChild(this.object, this.object.position.x, this.object.position.y);
+        return H2D_game_container.addChild(this.object, this.object.position.x, this.object.position.y);
     };
 
     /**
@@ -66,5 +66,5 @@
      * @return {[N/A]}
      */
     Text.prototype.remove = function() {
-        return H2D_game_stage.removeChild(this.object);
+        return H2D_game_container.removeChild(this.object);
     };

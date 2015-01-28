@@ -104,6 +104,7 @@
         /** Hide this animation */
         this.anims[options.name].stop();
         this.anims[options.name].visible = false;
+        displaySprite(this.anims[options.name], this.anims[options.name].position.x, this.anims[options.name].position.y);
 
         /** This is an animation ! */
         this.animType[options.name] = "anim";
@@ -124,11 +125,8 @@
         this.anims[anim].position.y = this.object.position.y;
 
         /** Okay, ready to play ! */
-        this.anims[anim].play();
         this.anims[anim].visible = true;
-
-        /** Display the animation to canvas */
-        displaySprite(this.anims[anim], this.anims[anim].position.x, this.anims[anim].position.y);
+        this.anims[anim].play();
 
     };
 
@@ -147,7 +145,6 @@
             if(this.usedAnim) {
                 this.anims[this.usedAnim].visible = false;
                 this.anims[this.usedAnim].stop();
-                removeSprite(this.anims[this.usedAnim]);
                 this.usedAnim = null; // Reset the last used animation !
             }
 
@@ -162,7 +159,6 @@
             if(this.usedAnim) {
                 this.anims[this.usedAnim].visible = false;
                 this.anims[this.usedAnim].stop();
-                removeSprite(this.anims[this.usedAnim]); // Remove sprite from the canvas
             }
 
             /** Hide the default sprite and launch the animation ! */
