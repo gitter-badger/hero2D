@@ -122,7 +122,7 @@
 		currentQuery.addEventListener("error", error, false);
 
 		/** Ask for the requested file */
-		currentQuery.open("GET", requestedFile, true);
+		currentQuery.open("GET", H2D_currentPath + requestedFile, true);
 
 		/** It's a sound ! */
 		if(this.type[filename] == "sound") currentQuery.responseType = 'arraybuffer';
@@ -137,7 +137,7 @@
 		 */
 		function progress(event) {
 			if(self.type[filename] == "sound") {
-				self.buffers[filename] = new Audio(requestedFile);
+				self.buffers[filename] = new Audio(H2D_currentPath + requestedFile);
 			}
 			return callback(self.getPercent());
 		}
@@ -193,6 +193,6 @@
  		if(this.type[name] == "sound") {
 			return this.buffers[name];
 		} else {
-			return this.files[name];
+			return H2D_currentPath + this.files[name];
 		}
  	}

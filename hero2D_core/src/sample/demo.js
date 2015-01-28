@@ -22,10 +22,10 @@
     });
 
     var preload = new Preloader({
-        mapTileset: 'src/sprites/tileset.png',
-        playerSprite: 'src/sprites/characters.png',
-        logo: 'logo.png',
-        music: 'src/sounds/theme.mp3'
+        mapTileset: 'sprites/tileset.png',
+        playerSprite: 'sprites/characters.png',
+        logo: '../logo.png',
+        music: 'sounds/theme.mp3'
     });
 
     preload.progress(function() {});
@@ -39,18 +39,15 @@
         music.loop();
 
         /** Map management */
-        join('src/sample/demo.map.js');
+        systemJoin('sample/demo.map.js');
 
         /** Player management */
-        join('src/sample/demo.player.js');
+        systemJoin('sample/demo.player.js');
 
         var logo = new Sprite(preload.$('logo'));
         logo.display(65, 0);
 
         var direction = 'down';
-
-        var example = new Text('Hey !');
-        example.display(30, 150);
 
         var welcome = new Text('Welcome to Hero2D ! For make a new game, create the src/main.js file. Enjoy !', {font: '11px Trebuchet MS', fill: 'white', stroke: 'gray', strokeThickness: 2, wordWrap: true, wordWrapWidth: 185, align: 'center'});
 
