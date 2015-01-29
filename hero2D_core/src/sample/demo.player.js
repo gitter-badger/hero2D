@@ -7,7 +7,6 @@
         width: 32,
         height: 32
     });
-    console.log('test');
     var player = new Sprite(playerFrame);
 
     /**

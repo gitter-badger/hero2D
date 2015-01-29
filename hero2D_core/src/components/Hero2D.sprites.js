@@ -311,7 +311,7 @@
      * @return {[object]}
      */
     function getPictureSize(source) {
-        return sizeOf(source);
+        return sizeOf(H2D_systemPath + source);
     }
 
     /**
