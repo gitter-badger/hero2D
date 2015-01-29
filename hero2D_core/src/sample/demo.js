@@ -35,7 +35,7 @@
         /** Create sound object */
         var music = new Sound(preload.$('music'));
 
-        music.play();
+        //music.play();
         music.loop();
 
         /** Map management */
