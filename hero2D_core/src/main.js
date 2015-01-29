@@ -42,8 +42,12 @@
     var H2D_currentPath = path.dirname(process.execPath) + '/';
     if(H2D_fileExists('src/game.js')) {
         H2D_currentPath = path.dirname(process.execPath) + '/src/';
+        XMLH2D_currentPath = H2D_currentPath;
+        H2D_systemPath = '';
     } else {
-        H2D_currentPath = path.dirname(process.execPath) + '/hero2D_core/src/';
+        H2D_systemPath = 'hero2D_core/';
+        H2D_currentPath = H2D_systemPath + 'src/';
+        XMLH2D_currentPath = 'src/';
     }
 
     /**
@@ -66,7 +70,7 @@
     };
 
     var systemJoin = function(source) {
-        source = path.dirname(process.execPath) + '/hero2D_core/src/' + source;
+        source = 'hero2D_core/src/' + source;
 
         function read(source) {
             return fs.readFileSync(source).toString();
