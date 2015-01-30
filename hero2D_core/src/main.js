@@ -30,7 +30,6 @@
 
     // Get the current window
     var win = gui.Window.get();
- 
 
     /**
      * File Exists ?
@@ -135,8 +134,10 @@
         this.result = code;
         this.indent = (typeof indent !== "undefined") ? indent : 0;
         this.partial = (typeof partial !== "undefined") ? true : false; /** There is a partial file ? */
-        this.path = filename.replace(filename.match('[^/]*$'), '');
-        console.log(this.path);
+
+        /** Actual FULL path */
+        this.fullPath = path.dirname(process.execPath) + '/' + filename.replace(filename.match('[^/]*$'), '');
+        this.fullPath = this.fullPath.replace(path.dirname(process.execPath) + '/' + path.dirname(process.execPath) + '/', path.dirname(process.execPath) + '/');
         var self = this;
 
         /** Get every file lines */
@@ -151,7 +152,25 @@
         mainLines.forEach(function(line) {
 
             /** Try to find include file line  */
-            var includeLine = line.match(/@include \"(.*?)\"/ig);
+            var includeLine = line.match(/@include (\"|\')(.*?)(\"|\')/ig);
+
+            /** Try to find a file to include */
+            var anyFile = line.match(/(\"|\')(.*?)(\"|\')/ig);
+            var pattern = /^[\w&.\-]+$/;
+            if(Array.isArray(anyFile)) {
+                anyFile.forEach(function(element) {
+                    var newElement = element.replace(/["']/g, "");
+                    var nameOfTheFile = path.basename(newElement).replace(/["']/g, "");
+
+                    /** Check if the Path URL is correct */
+                    if(nameOfTheFile && newElement.indexOf(' ') <= -1 && nameOfTheFile.indexOf('.') > -1 && nameOfTheFile.indexOf('.hero') <= -1 && nameOfTheFile.indexOf('.coffee') <= -1) {
+                        /** New Path */
+                        var targetPath = (self.fullPath + newElement).replace(/\\/g, "\\\\");
+                        /** Replace the line */
+                        line = line.replace(newElement, targetPath);
+                    }
+                });
+            }
 
             /** Some indents ? */
             var indentsLine = line.match(/([\t])/ig);
@@ -161,10 +180,10 @@
             if(includeLine) {
 
                 /** File to include with his content & his lines */
-                var joinFile = includeLine[0].match(/\"(.*?)\"/ig)[0].replace(/"/g, "");
-                var joinFileContent = fs.readFileSync(this.path + joinFile).toString();
+                var joinFile = includeLine[0].match(/(\"|\')(.*?)(\"|\')/ig)[0].replace(/["']/g, "");
+                var joinFileContent = fs.readFileSync(this.fullPath + joinFile).toString();
                 var joinFileLines = joinFileContent.split("\n");
-                mainLinesContent += Hero2DParser(this.path + joinFile, joinFileContent, indents, true);
+                mainLinesContent += Hero2DParser(this.fullPath + joinFile, joinFileContent, indents, true);
 
                 /** Delete @include line */
                 mainLinesContent = mainLinesContent.replace(joinFile, '');
@@ -183,6 +202,9 @@
             }
 
         });
+
+        /** Reset path ! */
+        this.fullPath = path.dirname(process.execPath) + '/';
 
         /** It's not a partial file ! */
         this.partial = false;
