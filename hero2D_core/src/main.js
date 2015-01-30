@@ -135,6 +135,8 @@
         this.result = code;
         this.indent = (typeof indent !== "undefined") ? indent : 0;
         this.partial = (typeof partial !== "undefined") ? true : false; /** There is a partial file ? */
+        this.path = filename.replace(filename.match('[^/]*$'), '');
+        console.log(this.path);
         var self = this;
 
         /** Get every file lines */
@@ -160,9 +162,9 @@
 
                 /** File to include with his content & his lines */
                 var joinFile = includeLine[0].match(/\"(.*?)\"/ig)[0].replace(/"/g, "");
-                var joinFileContent = fs.readFileSync(joinFile).toString();
+                var joinFileContent = fs.readFileSync(this.path + joinFile).toString();
                 var joinFileLines = joinFileContent.split("\n");
-                mainLinesContent += Hero2DParser(joinFile, joinFileContent, indents, true);
+                mainLinesContent += Hero2DParser(this.path + joinFile, joinFileContent, indents, true);
 
                 /** Delete @include line */
                 mainLinesContent = mainLinesContent.replace(joinFile, '');
@@ -206,7 +208,7 @@ child = exec("node node_modules/coffee-stir/bin/Main.js src/game.coffee", functi
 
   var content = stdout;
 
-  var parsedContent = Hero2DParser('game.coffee', content);
+  var parsedContent = Hero2DParser('src/game.coffee', content);
 
   console.log(parsedContent);
 
