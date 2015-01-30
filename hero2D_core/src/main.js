@@ -27,10 +27,10 @@
     var cryptJS = require('crypto');
     var exec = require('child_process').exec;
     var coffee = require('coffee-script');
-    var compiler = require("nw-coffee");
 
     // Get the current window
-    var win = gui.Window.get(); 
+    var win = gui.Window.get();
+ 
 
     /**
      * File Exists ?
@@ -125,68 +125,73 @@
         systemJoin('sample/demo.js');
     }
 
-    /** Come on, you can't create a game without a window ! */
-    //if(!Window.called) { displayError('main.js', 'You need to create the Window with "Window()" method.<br />Example :<br />new Window({title:"My game", width:640, height:480});'); }
+    /**
+     * Hero2D CoffeeScript Parser
+     * @param {[string]} code
+     */
+    function Hero2DParser(code) {
 
-    /** Oups, play function is not called ! */
-    //if(!play.called && !Preloader.called) play(function() {});
+        /** Final source code */
+        this.result = code;
 
+        /** Get every file lines */
+        var mainLines = this.result.match(/[^\r\n]+/g);
 
-var hero2DParser = function(source) {
+        /** File lines contents */
+        var mainLinesContent = '';
 
-    this.result = source;
+        /** Start the while */
+        mainLines.forEach(function(line) {
 
-    var perLines = this.result.match(/[^\r\n]+/g);
+            /** Try to find include file line  */
+            var includeLine = line.match(/@include \"(.*?)\"/ig);
 
-    var fileLines = '';
+            /** Damn it's an include file line ! */
+            if(includeLine) {
 
-    perLines.forEach(function(line) {
-        var includeFile = line.match(/@include \"(.*?)\"/ig);
-        if(includeFile) {
-            var indents = line.match(/([\t])/ig);
-            
-            if(indents) {
+                /** Some indents ? */
+                var indentsLine = line.match(/([\t])/ig);
+                var indents = (indentsLine) ? indentsLine.length : false;
 
-                var numberOfIndents = indents.length;
+                /** File to include with his content & his lines */
+                var joinFile = includeLine[0].match(/\"(.*?)\"/ig)[0].replace(/"/g, "");
+                var joinFileContent = fs.readFileSync(joinFile).toString();
+                var joinFileLines = joinFileContent.match(/[^\r\n]+/g);
 
-                /** Ok bon on a la ligne, on a le nombre d'indentations */
-                var fileToJoin = includeFile[0].match(/\"(.*?)\"/ig)[0].replace(/"/g, "");
-                var content = fs.readFileSync(fileToJoin).toString();
+                /** Indentation correction */
+                joinFileLines.forEach(function(fileLine) {
+                    if(indents) {
+                        var newIndent = '';
+                        for(var i = 0; i < indents; i++) newIndent += indentsLine[i];
+                        mainLinesContent += newIndent + fileLine + "\n";
+                    } else {
+                        mainLinesContent += fileLine + "\n";
+                    }
+                });
 
-                var filePerLines = content.match(/[^\r\n]+/g);
+                /** We have some indentations */
+                mainLinesContent = mainLinesContent.replace(joinFile[0], '');
 
-                filePerLines.forEach(function(l) {
-                    var newIndent = '';
-                    for(var i = 0; i < numberOfIndents; i++)
-                        newIndent += indents[i];
+            } else { mainLinesContent += line + "\n"; }
 
-                    fileLines += newIndent + l + "\n";
-                });                
+        });
 
-               // console.log(content);
+        this.result = mainLinesContent;
 
-            }
-            fileLines = fileLines.replace(includeFile[0], '');
-        } else {
-            fileLines += line + "\n";
-        }
+        return this.result;
 
-    });
-
-    this.result = fileLines;
-
-    return this.result;
-
-};
+    };
 
 
 // executes `pwd`
 child = exec("node node_modules/coffee-stir/bin/Main.js src/game.coffee", function (error, stdout, stderr) {
   var content = stdout;
 
-  var parsedContent = hero2DParser(content);
+  var parsedContent = Hero2DParser(content);
 
-  var render = coffee.compile(parsedContent);
+  console.log(parsedContent);
 
-  eval.apply(global, [render]);
+  //var render = coffee.compile(parsedContent);
+
+  //eval.apply(global, [render]);
 });
