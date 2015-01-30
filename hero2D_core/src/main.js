@@ -129,12 +129,12 @@
      * Hero2D CoffeeScript Parser
      * @param {[string]} code
      */
-    function Hero2DParser(code, indent, partial) {
+    function Hero2DParser(filename, code, indent, partial) {
 
         /** Final source code */
         this.result = code;
         this.indent = (typeof indent !== "undefined") ? indent : 0;
-        this.partial = (typeof partial !== "undefined") ? true : false;
+        this.partial = (typeof partial !== "undefined") ? true : false; /** There is a partial file ? */
         var self = this;
 
         /** Get every file lines */
@@ -142,9 +142,8 @@
 
         /** 
          * File lines content
-         * Can't explain the "s" missing character
          */
-        var mainLinesContent = new String('#[s]toDelete' + "\n");
+        var mainLinesContent = new String();
 
         /** Start the while */
         mainLines.forEach(function(line) {
@@ -163,32 +162,40 @@
                 var joinFile = includeLine[0].match(/\"(.*?)\"/ig)[0].replace(/"/g, "");
                 var joinFileContent = fs.readFileSync(joinFile).toString();
                 var joinFileLines = joinFileContent.split("\n");
-                mainLinesContent += Hero2DParser(joinFileContent, indents, true);
+                mainLinesContent += Hero2DParser(joinFile, joinFileContent, indents, true);
 
                 /** Delete @include line */
-                mainLinesContent = mainLinesContent.replace(joinFile[0], '');
+                mainLinesContent = mainLinesContent.replace(joinFile, '');
 
             } else { 
-                if(self.indent && self.partial) {
+
+                /** It's not an include file, just add the lines ! */
+                if(self.indent && self.partial) { // Wait it's a partial file
                     var newIndent = '';
                     for(var i = 0; i < self.indent; i++) newIndent += "\t";
                     mainLinesContent += newIndent + line + "\n";
-                } else {
+                } else { // It's the main file
                     mainLinesContent += line + "\n";
                 }
+
             }
 
         });
 
-        // Remove characters deleter system
-        mainLinesContent = mainLinesContent.replace('#[s]toDelete' + "\n", '');
-        mainLinesContent = mainLinesContent.replace('#[]toDelete' + "\n", '');
-
         /** It's not a partial file ! */
         this.partial = false;
 
+        /** Update result */
         this.result = mainLinesContent;
 
+        try {
+            coffee.compile(this.result);
+        }
+        catch(e) {
+            displayError(filename, e.message);
+        }
+
+        /** Return our beautiful coffee-code */
         return this.result;
 
     };
@@ -196,9 +203,10 @@
 
 // executes `pwd`
 child = exec("node node_modules/coffee-stir/bin/Main.js src/game.coffee", function (error, stdout, stderr) {
+
   var content = stdout;
 
-  var parsedContent = Hero2DParser(content);
+  var parsedContent = Hero2DParser('game.coffee', content);
 
   console.log(parsedContent);
 
