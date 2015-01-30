@@ -1,5 +1,5 @@
 
-new Window title: "test", width: 640, height: 480
+new Window title: "test", width: 640, height: 480, scale: true
 
 files =
 	mapTileset: "sprites/tileset.png"
@@ -18,7 +18,7 @@ preload.done ->
 	# Music
 	music = new Sound preload.$ "music"
 
-	@include "dossier1/dossier2/fichier2.coffee"
+	#@include "dossier1/dossier2/fichier2.coffee"
 
 	# Walk down animation
 	player.anim
