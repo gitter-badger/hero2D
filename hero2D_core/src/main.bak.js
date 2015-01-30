@@ -129,22 +129,17 @@
      * Hero2D CoffeeScript Parser
      * @param {[string]} code
      */
-    function Hero2DParser(code, indent, partial) {
+    function Hero2DParser(code) {
 
         /** Final source code */
         this.result = code;
-        this.indent = (typeof indent !== "undefined") ? indent : 0;
-        this.partial = (typeof partial !== "undefined") ? true : false;
         var self = this;
 
         /** Get every file lines */
-        var mainLines = this.result.split("\n");
+        var mainLines = this.result.match(/[^\r\n]+/g);
 
-        /** 
-         * File lines content
-         * Can't explain the "s" missing character
-         */
-        var mainLinesContent = new String('#[s]toDelete' + "\n");
+        /** File lines contents */
+        var mainLinesContent = '';
 
         /** Start the while */
         mainLines.forEach(function(line) {
@@ -152,40 +147,38 @@
             /** Try to find include file line  */
             var includeLine = line.match(/@include \"(.*?)\"/ig);
 
-            /** Some indents ? */
-            var indentsLine = line.match(/([\t])/ig);
-            var indents = (indentsLine) ? (indentsLine.length + self.indent) : self.indent;
-
             /** Damn it's an include file line ! */
             if(includeLine) {
+
+                /** Some indents ? */
+                var indentsLine = line.match(/([\t])/ig);
+                var indents = (indentsLine) ? indentsLine.length : 0;
 
                 /** File to include with his content & his lines */
                 var joinFile = includeLine[0].match(/\"(.*?)\"/ig)[0].replace(/"/g, "");
                 var joinFileContent = fs.readFileSync(joinFile).toString();
-                var joinFileLines = joinFileContent.split("\n");
-                mainLinesContent += Hero2DParser(joinFileContent, indents, true);
+                var joinFileLines = joinFileContent.match(/[^\r\n]+/g);
 
-                /** Delete @include line */
+                if(indents) {
+                    var newIndent = '';
+                    for(var i = 0; i < indents; i++) newIndent += "\t";
+                }
+
+                /** Indentation correction */
+                joinFileLines.forEach(function(fileLine) {
+                    if(indents) {
+                        mainLinesContent += newIndent + fileLine + "\n";
+                    } else {
+                        mainLinesContent += fileLine + "\n";
+                    }
+                });
+
+                /** We have some indentations */
                 mainLinesContent = mainLinesContent.replace(joinFile[0], '');
 
-            } else { 
-                if(self.indent && self.partial) {
-                    var newIndent = '';
-                    for(var i = 0; i < self.indent; i++) newIndent += "\t";
-                    mainLinesContent += newIndent + line + "\n";
-                } else {
-                    mainLinesContent += line + "\n";
-                }
-            }
+            } else { mainLinesContent += line + "\n"; }
 
         });
-
-        // Remove characters deleter system
-        mainLinesContent = mainLinesContent.replace('#[s]toDelete' + "\n", '');
-        mainLinesContent = mainLinesContent.replace('#[]toDelete' + "\n", '');
-
-        /** It's not a partial file ! */
-        this.partial = false;
 
         this.result = mainLinesContent;
 
@@ -202,7 +195,7 @@ child = exec("node node_modules/coffee-stir/bin/Main.js src/game.coffee", functi
 
   console.log(parsedContent);
 
-  var render = coffee.compile(parsedContent);
+  //var render = coffee.compile(parsedContent);
 
-  eval.apply(global, [render]);
+  //eval.apply(global, [render]);
 });
