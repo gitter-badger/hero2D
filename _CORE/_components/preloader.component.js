@@ -1,6 +1,6 @@
 /*!
  *
- * File: Hero2D.preload.js
+ * File: preloader.component.js
  * Hero2D Framework
  * Version : 0.0.1
  * Author : Christophe Corbalan @RedStarZOn
@@ -178,7 +178,7 @@
 		 * @return {[type]}
 		 */
 		function error(event) {
-			displayError('main.js', 'Problem with preloading. Please check the files to preload.');
+			H2D_error('PRELOAD', 'Problem with preloading. Please check the files to preload.');
 		}
 
  	};

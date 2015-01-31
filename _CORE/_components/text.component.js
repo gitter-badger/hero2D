@@ -1,6 +1,6 @@
 /*!
  *
- * File: Hero2D.text.js
+ * File: text.component.js
  * Hero2D Framework
  * Version : 0.0.1
  * Author : Christophe Corbalan @RedStarZOn

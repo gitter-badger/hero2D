@@ -1,6 +1,6 @@
 /*!
  *
- * File: Hero2D.window.js
+ * File: window.component.js
  * Hero2D Framework
  * Version : 0.0.1
  * Author : Christophe Corbalan @RedStarZOn
@@ -60,7 +60,7 @@
 
             /** Resize the canvas & the window */
             H2D_window_renderer.resize(options.width, options.height);
-            win.resizeTo(options.width, options.height + 29);
+            _WIN.resizeTo(options.width, options.height + 29);
         }
 
         /** Change the application title please ! */

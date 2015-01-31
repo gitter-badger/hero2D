@@ -1,6 +1,6 @@
 /*!
  *
- * File: Hero2D.sound.js
+ * File: sound.component.js
  * Hero2D Framework
  * Version : 0.0.1
  * Author : Christophe Corbalan @RedStarZOn
@@ -28,7 +28,7 @@
 
     	/** Wait wait, it's not an object ! */
     	if(typeof source !== "object") {
-    		this.object = new Audio(H2D_currentPath + source); // Create the audio object
+    		this.object = new Audio(source); // Create the audio object
     	}
 
     };

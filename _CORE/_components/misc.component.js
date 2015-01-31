@@ -1,6 +1,6 @@
 /*!
  *
- * File: Hero2D.misc.js
+ * File: misc.component.js
  * Hero2D Framework
  * Version : 0.0.1
  * Author : Christophe Corbalan @RedStarZOn

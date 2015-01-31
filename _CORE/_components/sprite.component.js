@@ -1,6 +1,6 @@
 /*!
  *
- * File: Hero2D.sprites.js
+ * File: sprite.component.js
  * Hero2D Framework
  * Version : 0.0.1
  * Author : Christophe Corbalan @RedStarZOn
@@ -311,7 +311,7 @@
      * @return {[object]}
      */
     function getPictureSize(source) {
-        return sizeOf(H2D_systemPath + source);
+        return sizeOf(source);
     }
 
     /**
