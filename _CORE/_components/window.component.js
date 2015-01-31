@@ -117,7 +117,11 @@
         
         /** Create the loop */
         function looper() {
-            callback();
+            try {
+                callback();
+            } catch(error) {
+                H2D_error('Play()', error.message);
+            }
             render();
             return requestAnimationFrame(looper);
         }

@@ -135,7 +135,7 @@
     	var H2D_error = function(title, message) {
     		document.querySelector('#error-file').innerText = 'File name : ' + title;
     		document.querySelector('#error-message').innerText = 'ERROR : ' + message;
-    		return document.querySelector('#error').display = 'block';
+    		return document.querySelector('#error').style.display = 'block';
     	};
 
     	var H2D_parse = function(filename, code, indent, partial) {

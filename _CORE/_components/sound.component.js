@@ -22,6 +22,8 @@
 	 */
     function Sound(source) {
 
+        console.log(source);
+
     	/** Audio Object & Volume */
     	this.object = source;
     	this.volume = 1;

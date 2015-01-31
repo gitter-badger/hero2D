@@ -38,7 +38,7 @@ html, body {
 }
 
 #error {
-	display: block;
+	display: none;
 	margin: 30px;
 }
 

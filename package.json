@@ -4,7 +4,7 @@
     "window": {
     	"title": "",
     	"icon": "_CORE/_pictures/app.png",
-        "toolbar": false,
+        "toolbar": true,
         "frame": true,
         "width": 640,
         "height": 480,
