@@ -36,3 +36,22 @@ html, body {
 	bottom: 40px;
 	opacity: 1;
 }
+
+#error {
+	display: block;
+	margin: 30px;
+}
+
+#error-file, #error-message {
+	color: rgba(255, 0, 0, 0.88);
+	font-family: "Courier new", sans-serif;
+	font-size: 15px;
+}
+
+#error-file {
+	display: block;
+	color: rgba(255, 0, 0, 0.88);
+	text-transform: uppercase;
+	font-family: "Courier new", sans-serif;
+	font-size: 15px;
+}

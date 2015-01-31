@@ -45,6 +45,15 @@
     };
 
     /**
+     * Remove a file
+     * @param  {[string]} location
+     * @return {[N/A]}
+     */
+    function removeFile(location) {
+        return fs.unlinkSync(location);
+    };
+
+    /**
      * Create a new data crypted file
      * @param  {[object]} content
      * @param  {[string]} source
@@ -90,4 +99,22 @@
         var dec = decipher.update(value, 'hex','utf8');
         dec += decipher.final('utf8');
         return dec;
+    };
+
+    /**
+     * Remove directory
+     * @param  {[string]} location
+     * @return {[N/A]}
+     */
+    function removeDir(location) {
+        return fs.rmdirSync(location);
+    };
+
+    /**
+     * Create a directory
+     * @param  {[string]} location
+     * @return {[N/A]}
+     */
+    function createDir(location) {
+        return fs.mkdirSync(location);
     };

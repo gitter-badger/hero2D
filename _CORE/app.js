@@ -102,6 +102,14 @@
     		return fs.existsSync(_SRC + location);
     	};
 
+        /**
+         * [Read file]
+         * @param {[string]} location
+         */
+        var H2D_getContent = function(location) {
+            return fs.readFileSync(_SRC + location).toString();
+        };
+
     	/**
     	 * [Remove a directory]
     	 * @param {[string]} location
@@ -125,8 +133,8 @@
     	 * [Ex: H2D_error('main.hero', 'Sprite not found (line 24)')]
     	 */
     	var H2D_error = function(title, message) {
-    		document.querySelector('#error-title') = title;
-    		document.querySelector('#error-message').innerHTML = message;
+    		document.querySelector('#error-file').innerText = 'File name : ' + title;
+    		document.querySelector('#error-message').innerText = 'ERROR : ' + message;
     		return document.querySelector('#error').display = 'block';
     	};
 
@@ -183,6 +191,9 @@
 
 	                /** File to include with his content & his lines */
 	                var joinFile = includeLine[0].match(/(\"|\')(.*?)(\"|\')/ig)[0].replace(/["']/g, "");
+                    if(!H2D_fileExists(joinFile)) {
+                        return H2D_error(filename, joinFile + ' doesn\'t exists.');
+                    }
 	                var joinFileContent = fs.readFileSync(this.fullPath + joinFile).toString();
 	                var joinFileLines = joinFileContent.split("\n");
 	                mainLinesContent += H2D_parse(this.fullPath + joinFile, joinFileContent, indents, true);
@@ -215,7 +226,7 @@
 	        this.result = mainLinesContent;
 
 	        try {
-	            coffee.compile(this.result);
+	            var preCompile = coffee.compile(this.result);
 	        }
 	        catch(e) {
 	            H2D_error(filename, e.message);
@@ -231,25 +242,17 @@
     	 */
     	var H2D_compile = function() {
 
-    		/** Execute the compile command */
-    		exec("node node_modules/coffee-stir/bin/Main.js src/game.hero", function (error, stdout, stderr) {
+            /** Let's parse the code ! (@include functions) */
+            var parsedContent = H2D_parse('src/game.hero', H2D_getContent('game.hero'));
 
-    			/** Let's parse the code ! (@include functions) */
-				var parsedContent = H2D_parse('src/game.hero', stdout);
+            /** Hope everything will be okay */
+            try {
+                var render = coffee.compile(parsedContent);
+                eval.apply(global, [render]);
+            } catch(error) {
+                H2D_error('game.hero', error.message);
+            }
 
-				/** Hope everything will be okay */
-				try {
-					var render = coffee.compile(parsedContent);
-				} catch(error) {
-					return H2D_error('game.hero', error.message);
-				}
-
-				console.log(render);
-
-				/** Sounds good, let's go ! */
-				return eval.apply(global, [render]);
-
-			});
     	};
 
     /**
