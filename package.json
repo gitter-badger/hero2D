@@ -1,10 +1,10 @@
 {
     "name": null,
-    "main": "hero2D_core/start.app",
+    "main": "_CORE/structure.html",
     "window": {
     	"title": "",
-    	"icon": "hero2D_core/app.png",
-        "toolbar": true,
+    	"icon": "_CORE/_pictures/app.png",
+        "toolbar": false,
         "frame": true,
         "width": 640,
         "height": 480,

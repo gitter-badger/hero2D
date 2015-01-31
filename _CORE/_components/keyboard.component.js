@@ -1,6 +1,6 @@
 /*!
  *
- * File: Hero2D.keyboard.js
+ * File: keyboard.component.js
  * Hero2D Framework
  * Version : 0.0.1
  * Author : Christophe Corbalan @RedStarZOn
